@@ -4,6 +4,7 @@
  * @property Model_pengguna model_pengguna
  * @property Model_kategori model_kategori
  * @property Model_tulisan model_tulisan
+ * @property CI_Session session
  */
 class Pengguna extends CI_Controller{
 	function __construct(){
