@@ -65,7 +65,7 @@ function simpan_pengguna(){
 				$email=$this->input->post('xemail');
 				$nohp=$this->input->post('xkontak');
 				$level=$this->input->post('xlevel');
-				$gambar=$_FILES['foto'];
+				$gbr=$_FILES['foto'];
 				if ($foto=''){}else{
 					$config['upload_path'] = './assets/images/';
 					$config['allowed_types'] = 'jpg|jpeg|png|gif';
