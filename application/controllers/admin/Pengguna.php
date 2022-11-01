@@ -64,7 +64,17 @@ function simpan_pengguna(){
 				$email=$this->input->post('xemail');
 				$nohp=$this->input->post('xkontak');
 				$level=$this->input->post('xlevel');
-				$gambar=$this->input->post('xgambar');
+				$gambar=$_FILES['foto'];
+				if ($foto=''){}else{
+					$config['upload_path'] = './assets/images/';
+					$config['allowed_types'] = 'jpg|jpeg|png|gif';
+					$this->load->library('upload',$config);
+					if(!$this->upload->do_upload('foto')){
+						echo "Gambar Gagal Diupload!";
+					}else{
+						$foto=$this->upload->data('file_name');
+					}
+				}
 				if ($password <> $konfirm_password) {
 					echo $this->session->set_flashdata('msg','error');
 					  redirect('admin/pengguna');
@@ -139,14 +149,14 @@ function simpan_pengguna(){
 					$level=$this->input->post('xlevel');
 					$gambar=$this->input->post('xgambar');
 					if (empty($password) && empty($konfirm_password)) {
-						$this->m_pengguna->update_pengguna_tanpa_pass($kode,$nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
+						$this->model_pengguna->update_pengguna_tanpa_pass($kode,$nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
 						echo $this->session->set_flashdata('msg','info');
 						   redirect('admin/pengguna');
 					}elseif ($password <> $konfirm_password) {
 						 echo $this->session->set_flashdata('msg','error');
 						   redirect('admin/pengguna');
 					}else{
-						$this->m_pengguna->update_pengguna($kode,$nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
+						$this->model_pengguna->update_pengguna($kode,$nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
 						echo $this->session->set_flashdata('msg','info');
 						redirect('admin/pengguna');
 					}
@@ -169,14 +179,14 @@ function simpan_pengguna(){
 				$level=$this->input->post('xlevel');
 				$gambar=$this->input->post('xgambar');
 				if (empty($password) && empty($konfirm_password)) {
-					$this->m_pengguna->update_pengguna_tanpa_pass_dan_gambar($kode,$nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
+					$this->model_pengguna->update_pengguna_tanpa_pass_dan_gambar($kode,$nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
 					echo $this->session->set_flashdata('msg','info');
 					   redirect('admin/pengguna');
 				}elseif ($password <> $konfirm_password) {
 					 echo $this->session->set_flashdata('msg','error');
 					   redirect('admin/pengguna');
 				}else{
-					$this->m_pengguna->update_pengguna_tanpa_gambar($kode,$nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
+					$this->model_pengguna->update_pengguna_tanpa_gambar($kode,$nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
 					echo $this->session->set_flashdata('msg','info');
 					redirect('admin/pengguna');
 				}
@@ -200,13 +210,13 @@ function hapus_pengguna(){
 function reset_password(){
    
 	$id=$this->uri->segment(4);
-	$get=$this->m_pengguna->getusername($id);
+	$get=$this->model_pengguna->getusername($id);
 	if($get->num_rows()>0){
 		$a=$get->row_array();
 		$b=$a['pengguna_username'];
 	}
 	$pass=rand(123456,999999);
-	$this->m_pengguna->resetpass($id,$pass);
+	$this->model_pengguna->resetpass($id,$pass);
 	echo $this->session->set_flashdata('msg','show-modal');
 	echo $this->session->set_flashdata('uname',$b);
 	echo $this->session->set_flashdata('upass',$pass);
