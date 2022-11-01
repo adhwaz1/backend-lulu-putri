@@ -1,0 +1,69 @@
+body{
+	width: 800px;
+	height: 300px;
+	margin: 20px auto;
+}
+.struk{
+	height: 630px;
+	border: 5px solid #ccc;
+	background: #fff;
+	border-radius: 3px;
+
+}
+#judul-struk{
+	font-size: 26pt;
+	font-family: Calibri;
+	text-align: center;
+}
+#dis-struk{
+	width: 500px;
+	margin-left: 20px;
+}
+#dis-struk li{
+	display: inline-table;
+}
+#dis-struk-label p{
+	width: 200px;
+}
+#dis-struk-fild p{
+	width: 200px;
+	margin-left: 2px;
+}
+#background{
+	float: right;
+	margin-top: -400px;
+	margin-right: 100px;
+}
+li{
+	list-style: none;
+}
+#ttd-pelanggan{
+	height: 150px;
+	margin-left: 50px;
+	margin-right: 460px;	
+}
+#ttd-pelanggan-title{
+	margin-left: 50px;	
+}
+#ttd-pelanggan-fild{
+	margin-top: 60px;
+}
+#bt{
+	float: left;
+	margin-top: -60px;
+	margin-left: 330px;
+}
+#bt button{ 
+	height: 30px;
+	width: 80px;
+}
+#admin{
+	float: right;
+	margin-top: -150px;
+	margin-right: 150px;
+}
+#ttd-admin{
+	float: right;
+	margin-top: -80px;
+	margin-right: 90px;
+}
