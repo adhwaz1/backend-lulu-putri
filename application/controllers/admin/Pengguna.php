@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * @property Model_pengguna model_pengguna
+ * @property Model_kategori model_kategori
+ * @property Model_tulisan model_tulisan
+ */
 class Pengguna extends CI_Controller{
 	function __construct(){
 		parent::__construct();
