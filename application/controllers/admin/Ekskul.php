@@ -12,7 +12,7 @@ class Ekskul extends CI_Controller{
 
 
 	function index(){
-		$x['data']=$this->model_ekskul->get_all_ekskul();
+		$x['ekskul']=$this->model_ekskul->get_all_ekskul();
 		$this->load->view('admin/v_ekskul',$x);
 	}
 
