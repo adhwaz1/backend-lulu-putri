@@ -109,20 +109,6 @@
                         </td>
                       </tr>
 
-                      <?php
-                      foreach ($ekskul as $data): ?>
-                      <tr>
-                      <td style="text-align: center;"><?php echo $no++;?></td>
-                      <td><?php echo $data['photo'];?></td>
-                      <td><?php echo $data['nama_ekstrakulikuler'];?></td>
-                      <td><?php echo $data['deskripsi'];?></td>
-                      <td style="text-align: center;">
-                  <a href="<?php echo base_url();?>ekskul/editdata/<?php echo $data->id_ekskul;?>" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
-                  <a href="<?php echo base_url();?>ekskul/hapusdata/<?php echo $data->id_ekskul;?>" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
-                </td>                     
-              </tr>
-              <?php endforeach;?> 
-
                     </tbody>
                   </table>
                 </div>

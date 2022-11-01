@@ -8,7 +8,6 @@ class Pengguna extends CI_Controller{
 		$this->load->model('model_kategori');
 	}
 
-
 	function index(){
 		$kode=$this->session->userdata('idadmin');
 		$x['user']=$this->model_pengguna->get_pengguna_login($kode);
@@ -50,34 +49,53 @@ function simpan_pengguna(){
 				$this->image_lib->resize();
 
 				$gambar=$gbr['file_name'];
-										$nama=$this->input->post('xnama');
-										$jenkel=$this->input->post('xjenkel');
-										$string   = preg_replace('/[^a-zA-Z0-9 \&%|{.}=,?!*()"-_+$@;<>\']/', '', $judul);
-										$trim     = trim($string);
-										$slug     = strtolower(str_replace(" ", "-", $trim));
-										$username=$this->input->post('xusername');
-										$data=$this->model_kategori->get_kategori_byid($kategori_id);
-										$q=$data->row_array();
-										$password=$q['xpassword'];
-										//$imgslider=$this->input->post('ximgslider');
-										$email=['xemail'];
-										$kode=$this->session->userdata('idadmin');
-										$user=$this->model_pengguna->get_pengguna_login($kode);
-										$p=$user->row_array();
-										$nohp=$this->input->post('xnohp');
-										$level="xlevel";
-										$gambar=$p['xgambar'];
-										$this->model_pengguna->simpan_pengguna($nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
-										echo $this->session->set_flashdata('msg','success');
-										redirect('admin/pengguna');
-								}else{
+				$gambar=$gbr['file_name'];
+				$nama=$this->input->post('xnama');
+				$jenkel=$this->input->post('xjenkel');
+				$username=$this->input->post('xusername');
+				$password=$this->input->post('xpassword');
+				$konfirm_password=$this->input->post('xpassword2');
+				$email=$this->input->post('xemail');
+				$nohp=$this->input->post('xkontak');
+				$level=$this->input->post('xlevel');
+				$gambar=$this->input->post('xgambar');
+				if ($password <> $konfirm_password) {
+					echo $this->session->set_flashdata('msg','error');
+					  redirect('admin/pengguna');
+				}else{
+					$this->model_pengguna->simpan_pengguna($nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
+					echo $this->session->set_flashdata('msg','success');
+					redirect('admin/pengguna');
+
+				}
+								
+			
+		}else{
 			echo $this->session->set_flashdata('msg','warning');
 			redirect('admin/pengguna');
 		}
 
 	}else{
-		redirect('admin/pengguna');
+	 	$nama=$this->input->post('xnama');
+		$jenkel=$this->input->post('xjenkel');
+		$username=$this->input->post('xusername');
+		$password=$this->input->post('xpassword');
+		$konfirm_password=$this->input->post('xpassword2');
+		$email=$this->input->post('xemail');
+		$nohp=$this->input->post('xkontak');
+		$level=$this->input->post('xlevel');
+		$gambar=$this->input->post('xgambar');
+		if ($password <> $konfirm_password) {
+			echo $this->session->set_flashdata('msg','error');
+			redirect('admin/pengguna');
+		}else{
+			$this->model_pengguna->simpan_pengguna($nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
+			echo $this->session->set_flashdata('msg','success');
+			redirect('admin/pengguna');
+
+		}
 	}
+}
 	
 	function update_pengguna(){
 
@@ -104,26 +122,28 @@ function simpan_pengguna(){
 					$this->image_lib->resize();
 
 					$gambar=$gbr['file_name'];
-										$nama=$this->input->post('xnama');
-										$jenkel=$this->input->post('xjenkel');
-										$string   = preg_replace('/[^a-zA-Z0-9 \&%|{.}=,?!*()"-_+$@;<>\']/', '', $judul);
-										$trim     = trim($string);
-										$slug     = strtolower(str_replace(" ", "-", $trim));
-										$username=$this->input->post('xusername');
-										$data=$this->model_kategori->get_kategori_byid($kategori_id);
-										$q=$data->row_array();
-										$password=$q['xpassword'];
-										//$imgslider=$this->input->post('ximgslider');
-										$email=['xemail'];
-										$kode=$this->session->userdata('idadmin');
-										$user=$this->model_pengguna->get_pengguna_login($kode);
-										$p=$user->row_array();
-										$nohp=$this->input->post('xnohp');
-										$level=$p['xlevel'];
-										$gambar=$p['xgambar'];
-										$this->model_pengguna->update_pengguna($nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
-										echo $this->session->set_flashdata('msg','success');
-										redirect('admin/pengguna');
+					$nama=$this->input->post('xnama');
+					$jenkel=$this->input->post('xjenkel');
+					$username=$this->input->post('xusername');
+					$password=$this->input->post('xpassword');
+					$konfirm_password=$this->input->post('xpassword2');
+					$email=$this->input->post('xemail');
+					$nohp=$this->input->post('xkontak');
+					$level=$this->input->post('xlevel');
+					$gambar=$this->input->post('xgambar');
+					if (empty($password) && empty($konfirm_password)) {
+						$this->m_pengguna->update_pengguna_tanpa_pass($kode,$nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
+						echo $this->session->set_flashdata('msg','info');
+						   redirect('admin/pengguna');
+					}elseif ($password <> $konfirm_password) {
+						 echo $this->session->set_flashdata('msg','error');
+						   redirect('admin/pengguna');
+					}else{
+						$this->m_pengguna->update_pengguna($kode,$nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
+						echo $this->session->set_flashdata('msg','info');
+						redirect('admin/pengguna');
+					}
+					
 		}else{
 			echo $this->session->set_flashdata('msg','warning');
 			redirect('admin/pengguna');
@@ -134,36 +154,56 @@ function simpan_pengguna(){
 				$gambar=$gbr['file_name'];
 				$nama=$this->input->post('xnama');
 				$jenkel=$this->input->post('xjenkel');
-				$string   = preg_replace('/[^a-zA-Z0-9 \&%|{.}=,?!*()"-_+$@;<>\']/', '', $judul);
-				$trim     = trim($string);
-				$slug     = strtolower(str_replace(" ", "-", $trim));
 				$username=$this->input->post('xusername');
-				$data=$this->model_kategori->get_kategori_byid($kategori_id);
-				$q=$data->row_array();
-				$password=$q['xpassword'];
-				//$imgslider=$this->input->post('ximgslider');
-				$email=['xemail'];
-				$kode=$this->session->userdata('idadmin');
-				$user=$this->model_pengguna->get_pengguna_login($kode);
-				$p=$user->row_array();
-				$nohp=$this->input->post('xnohp');
-				$level=$p['xlevel'];
-				$gambar=$p['xgambar'];
-				$this->model_pengguna->update_pengguna_tanpa_img($nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
-				echo $this->session->set_flashdata('msg','success');
-				redirect('admin/pengguna');
+				$password=$this->input->post('xpassword');
+				$konfirm_password=$this->input->post('xpassword2');
+				$email=$this->input->post('xemail');
+				$nohp=$this->input->post('xkontak');
+				$level=$this->input->post('xlevel');
+				$gambar=$this->input->post('xgambar');
+				if (empty($password) && empty($konfirm_password)) {
+					$this->m_pengguna->update_pengguna_tanpa_pass_dan_gambar($kode,$nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
+					echo $this->session->set_flashdata('msg','info');
+					   redirect('admin/pengguna');
+				}elseif ($password <> $konfirm_password) {
+					 echo $this->session->set_flashdata('msg','error');
+					   redirect('admin/pengguna');
+				}else{
+					$this->m_pengguna->update_pengguna_tanpa_gambar($kode,$nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
+					echo $this->session->set_flashdata('msg','info');
+					redirect('admin/pengguna');
+				}
 		}
 
-	}
 }
 
 function hapus_pengguna(){
 	$kode=$this->input->post('kode');
-	$gambar=$this->input->post('gambar');
-	$path='./assets/images/'.$gambar;
-	unlink($path);
-	$this->model_tulisan->hapus_tulisan($kode);
+	$data=$this->m_pengguna->get_pengguna_login($kode);
+	$q=$data->row_array();
+	$p=$q['pengguna_photo'];
+	$path=base_url().'assets/images/'.$p;
+	delete_files($path);
+	$this->m_pengguna->hapus_pengguna($kode);
 	echo $this->session->set_flashdata('msg','success-hapus');
 	redirect('admin/pengguna');
+}
+
+function reset_password(){
+   
+	$id=$this->uri->segment(4);
+	$get=$this->m_pengguna->getusername($id);
+	if($get->num_rows()>0){
+		$a=$get->row_array();
+		$b=$a['pengguna_username'];
 	}
+	$pass=rand(123456,999999);
+	$this->m_pengguna->resetpass($id,$pass);
+	echo $this->session->set_flashdata('msg','show-modal');
+	echo $this->session->set_flashdata('uname',$b);
+	echo $this->session->set_flashdata('upass',$pass);
+	redirect('admin/pengguna');
+
+}
+
 }
