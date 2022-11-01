@@ -103,6 +103,7 @@
                        $pengguna_deskripsi=$i['pengguna_deskripsi'];
                        $pengguna_photo=$i['pengguna_photo'];
                     ?>
+                    <?php endforeach;?>
                       <tr>
                         <td>1</td>
                         <td><img width="40" height="40" class="img-circle" src="<?php echo base_url() ?>tampilan/gambar/jurusan.png"></td>
@@ -177,6 +178,138 @@
       </div>
     </div>
   </div>
+
+  <?php foreach ($data->result_array() as $i) :
+              $pengguna_id=$i['pengguna_id'];
+              $pengguna_nama=$i['pengguna_nama'];
+              $pengguna_jenkel=$i['pengguna_deskripsi'];
+              $pengguna_photo=$i['pengguna_photo'];
+            ?>
+            <?php endforeach;?>
+
+  <!--Modal Edit Ekskul-->
+  <div class="modal fade" id="ModalEdit<?php echo $pengguna_id;?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><span class="fa fa-close"></span></span></button>
+                        <h4 class="modal-title" id="myModalLabel">Edit Ekskul</h4>
+                    </div>
+                    <form class="form-horizontal" action="<?php echo base_url().'admin/pengguna/update_pengguna'?>" method="post" enctype="multipart/form-data">
+                    <div class="modal-body">
+
+                    <div class="form-group">
+                                        <label for="inputUserName" class="col-sm-4 control-label">Nama Ekstrakulikuler</label>
+                                        <div class="col-sm-7">
+											                  <input type="hidden" name="kode" value="<?php echo $pengguna_id;?>"/> 
+                                            <input type="text" name="xnama" class="form-control" id="inputUserName" value="<?php echo $pengguna_nama;?>" placeholder="Nama Lengkap" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail3" class="col-sm-4 control-label">Deskripsi</label>
+                                        <div class="col-sm-7">
+                                            <input type="text" name="xdeskripsi" class="form-control" value="<?php echo $pengguna_deskripsi;?>" id="inputDeskripsi" placeholder="Deskripsi" required>
+                                        </div>
+                                    </div>	  
+                    </div>
+                 </div>
+                          <div class="form-group">
+                          <label for="inputUserName" class="col-sm-4 control-label">Photo</label>
+                          <div class="col-sm-7">
+                              <input type="file" name="xphoto" class="form-control" value="<?php echo $pengguna_photo;?>" id="inputfile" placeholder="photo" required>
+                        </div>
+                      </div>
+											    <?php if($pengguna_level=='1'):?>
+                                <option value="1" selected>Administrator</option>
+                                <option value="2">Kepala Sekolah</option>
+											    <?php else:?>
+												        <option value="1">Administrator</option>
+                                <option value="2" selected>Author</option>
+                          </select>
+                       </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputUserName" class="col-sm-4 control-label">Photo</label>
+                        <div class="col-sm-7">
+                            <input type="file" name="filefoto"/>
+                        </div>
+                    </div>
+                               
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-flat" id="simpan">Update</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+  <?php foreach ($data->result_array() as $i) :
+              $pengguna_id=$i['pengguna_id'];
+              $pengguna_nama=$i['pengguna_nama'];
+              $pengguna_jenkel=$i['pengguna_deskripsi'];
+              $pengguna_photo=$i['pengguna_photo'];
+            ?>
+
+            <!--Modal Hapus Ekskul-->
+        <div class="modal fade" id="ModalHapus<?php echo $pengguna_id;?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><span class="fa fa-close"></span></span></button>
+                        <h4 class="modal-title" id="myModalLabel">Hapus Ekskul</h4>
+                    </div>
+                    <form class="form-horizontal" action="<?php echo base_url().'admin/pengguna/hapus_ekskul'.$pengguna_id;?>" method="post" enctype="multipart/form-data">
+                    <div class="modal-body">       
+							<input type="hidden" name="kode" value="<?php echo $pengguna_id;?>"/> 
+                            <p>Apakah Anda yakin mau menghapus Pengguna <b><?php echo $pengguna_nama;?></b> ?</p>
+                               
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary btn-flat" id="simpan">Hapus</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+	<?php endforeach;?>
+
+	<!--Modal Reset Password-->
+  <div class="modal fade" id="ModalResetPassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><span class="fa fa-close"></span></span></button>
+                        <h4 class="modal-title" id="myModalLabel">Reset Password</h4>
+                    </div>
+                    
+                    <div class="modal-body">
+                                
+                            <table>
+                                <tr>
+                                    <th style="width:120px;">Username</th>
+                                    <th>:</th>
+                                    <th><?php echo $this->session->flashdata('uname');?></th>
+                                </tr>
+                                <tr>
+                                    <th style="width:120px;">Password Baru</th>
+                                    <th>:</th>
+                                    <th><?php echo $this->session->flashdata('upass');?></th>
+                                </tr>
+                            </table>                     
+                                    
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+                                
 
 
   <!-- jQuery 2.2.3 -->
