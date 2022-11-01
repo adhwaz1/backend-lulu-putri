@@ -97,6 +97,12 @@
                     </thead>
                     <tbody>
 
+                    <?php foreach ($data->result_array() as $i) :
+                       $pengguna_id=$i['pengguna_id'];
+                       $pengguna_nama_ekstrakulikuler=$i['pengguna_nama'];
+                       $pengguna_deskripsi=$i['pengguna_deskripsi'];
+                       $pengguna_photo=$i['pengguna_photo'];
+                    ?>
                       <tr>
                         <td>1</td>
                         <td><img width="40" height="40" class="img-circle" src="<?php echo base_url() ?>tampilan/gambar/jurusan.png"></td>
@@ -128,20 +134,6 @@
       <strong>Copyright <?php echo date('Y'); ?> by SMKN 1 Garut</strong>
     </footer>
 
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-      <!-- Create the tabs -->
-      <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-        <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-        <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-      </ul>
-      <!-- Tab panes -->
-      <div class="tab-content">
-
-    </aside>
-    <!-- /.control-sidebar -->
-    <!-- Add the sidebar's background. This div must be placed
-       immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
   </div>
   <!-- ./wrapper -->

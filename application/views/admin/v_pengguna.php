@@ -297,38 +297,38 @@
                             <input type="password" name="xpassword" class="form-control" id="inputPassword3" placeholder="Password">
                       </div> 
                     </div>
-                                    <div class="form-group">
-                                        <label for="inputPassword4" class="col-sm-4 control-label">Ulangi Password</label>
-                                        <div class="col-sm-7">
-                                            <input type="password" name="xpassword2" class="form-control" id="inputPassword4" placeholder="Ulangi Password">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inputUserName" class="col-sm-4 control-label">Kontak Person</label>
-                                        <div class="col-sm-7">
-                                            <input type="text" name="xkontak" class="form-control" value="<?php echo $pengguna_nohp;?>" id="inputUserName" placeholder="Kontak Person" required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inputUserName" class="col-sm-4 control-label">Level</label>
-                                        <div class="col-sm-7">
-                                            <select class="form-control" name="xlevel" required>
-											<?php if($pengguna_level=='1'):?>
-                                                <option value="1" selected>Administrator</option>
-                                                <option value="2">Kepala Sekolah</option>
-											<?php else:?>
-												<option value="1">Administrator</option>
-                                                <option value="2" selected>Author</option>
-											<?php endif;?>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inputUserName" class="col-sm-4 control-label">Photo</label>
-                                        <div class="col-sm-7">
-                                            <input type="file" name="filefoto"/>
-                                        </div>
-                                    </div>
+                        <div class="form-group">
+                           <label for="inputPassword4" class="col-sm-4 control-label">Ulangi Password</label>
+                        <div class="col-sm-7">
+                        <input type="password" name="xpassword2" class="form-control" id="inputPassword4" placeholder="Ulangi Password">
+                      </div>
+                    </div>
+                          <div class="form-group">
+                          <label for="inputUserName" class="col-sm-4 control-label">Kontak Person</label>
+                          <div class="col-sm-7">
+                              <input type="text" name="xkontak" class="form-control" value="<?php echo $pengguna_nohp;?>" id="inputUserName" placeholder="Kontak Person" required>
+                        </div>
+                      </div>
+                          <div class="form-group">
+                          <label for="inputUserName" class="col-sm-4 control-label">Level</label>
+                          <div class="col-sm-7">
+                          <select class="form-control" name="xlevel" required>
+											    <?php if($pengguna_level=='1'):?>
+                                <option value="1" selected>Administrator</option>
+                                <option value="2">Kepala Sekolah</option>
+											    <?php else:?>
+												        <option value="1">Administrator</option>
+                                <option value="2" selected>Author</option>
+											    <?php endif;?>
+                          </select>
+                       </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputUserName" class="col-sm-4 control-label">Photo</label>
+                        <div class="col-sm-7">
+                            <input type="file" name="filefoto"/>
+                        </div>
+                    </div>
                                
 
                     </div>
