@@ -80,7 +80,7 @@
                 </thead>
                 <tbody>
 
-                <?php foreach ($data->result_array() as $i) :
+                <?php foreach ($data->result_array() as $i):
                        $pengguna_id=$i['pengguna_id'];
                        $pengguna_nama=$i['pengguna_nama'];
                        $pengguna_jenkel=$i['pengguna_jenkel'];
@@ -361,7 +361,7 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><span class="fa fa-close"></span></span></button>
                         <h4 class="modal-title" id="myModalLabel">Hapus Pengguna</h4>
                     </div>
-                    <form class="form-horizontal" action="<?php echo base_url().'admin/pengguna/hapus_pengguna'.$pengguna_id;?>" method="post" enctype="multipart/form-data">
+                    <form class="form-horizontal" action="<?php echo base_url().'admin/pengguna/hapus_pengguna';?>" method="post" enctype="multipart/form-data">
                     <div class="modal-body">       
 							<input type="hidden" name="kode" value="<?php echo $pengguna_id;?>"/> 
                             <p>Apakah Anda yakin mau menghapus Pengguna <b><?php echo $pengguna_nama;?></b> ?</p>

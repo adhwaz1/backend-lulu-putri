@@ -185,13 +185,14 @@ function simpan_pengguna(){
 }
 
 function hapus_pengguna(){
+
 	$kode=$this->input->post('kode');
-	$data=$this->m_pengguna->get_pengguna_login($kode);
+	$data=$this->model_pengguna->get_pengguna_login($kode);
 	$q=$data->row_array();
 	$p=$q['pengguna_photo'];
 	$path=base_url().'assets/images/'.$p;
 	delete_files($path);
-	$this->m_pengguna->hapus_pengguna($kode);
+	$this->model_pengguna->hapus_pengguna($kode);
 	echo $this->session->set_flashdata('msg','success-hapus');
 	redirect('admin/pengguna');
 }
