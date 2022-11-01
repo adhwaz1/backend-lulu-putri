@@ -128,6 +128,7 @@ function simpan_pengguna(){
 					$this->image_lib->resize();
 
 					$gambar=$gbr['file_name'];
+					$kode=$this->input->post('kode');
 					$nama=$this->input->post('xnama');
 					$jenkel=$this->input->post('xjenkel');
 					$username=$this->input->post('xusername');
@@ -157,7 +158,7 @@ function simpan_pengguna(){
 
 
 		}else{
-				$gambar=$gbr['file_name'];
+				$kode=$this->input->post('kode');
 				$nama=$this->input->post('xnama');
 				$jenkel=$this->input->post('xjenkel');
 				$username=$this->input->post('xusername');
