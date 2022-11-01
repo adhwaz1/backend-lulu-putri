@@ -100,10 +100,6 @@
 									<tbody>
 
 									<?php foreach ($data->result_array() as $i) :
-										$pengguna_id = $i['pengguna_id'];
-										$pengguna_nama_ekstrakulikuler = $i['pengguna_nama'];
-										$pengguna_deskripsi = $i['pengguna_deskripsi'];
-										$pengguna_photo = $i['pengguna_photo'];
 										?>
 									<?php endforeach; ?>
 									<tr>
