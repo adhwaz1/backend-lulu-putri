@@ -83,7 +83,7 @@ function simpan_pengguna(){
 				$email=$this->input->post('xemail');
 				$nohp=$this->input->post('xkontak');
 				$level=$this->input->post('xlevel');
-				$gbr=$_FILES['foto'];
+				$foto=$_FILES['xfoto'];
 				if ($foto=''){}else{
 					$config['upload_path'] = './assets/images/';
 					$config['allowed_types'] = 'jpg|jpeg|png|gif';
@@ -166,7 +166,7 @@ function simpan_pengguna(){
 					$email=$this->input->post('xemail');
 					$nohp=$this->input->post('xkontak');
 					$level=$this->input->post('xlevel');
-					$gambar=$this->input->post('xgambar');
+					//$gambar=$this->input->post('xgambar');
 					if (empty($password) && empty($konfirm_password)) {
 						$this->model_pengguna->update_pengguna_tanpa_pass($kode,$nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar);
 						echo $this->session->set_flashdata('msg','info');

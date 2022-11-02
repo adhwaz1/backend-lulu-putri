@@ -93,18 +93,28 @@
 									</tr>
 								</thead>
 							<tbody>
-									<tr>
-										<td>1</td>
-										<td><img width="40" height="40" class="img-circle"
-												 src="<?php echo base_url() ?>tampilan/gambar/jurusan.png"></td>
-
-										<td>Coding</td>
-										<td>Coding Aja</td>
-										<td style="text-align:right;">
-											<a class="btn" data-toggle="modal"><span class="fa fa-pencil"></span></a>
-											<a class="btn" data-toggle="modal"><span class="fa fa-trash"></span></a>
-										</td>
-									</tr>
+							<tr>
+                <td><img width="40" height="40" class="img-circle" src="<?php echo base_url().'assets/images/'.$pengguna_photo;?>"></td>
+                  <td><?php echo $judul_ekskul;?></td>
+                  <td><?php echo $pengguna_email;?></td>
+                  <?php if($pengguna_jenkel=='L'):?>
+                        <td>Laki-Laki</td>
+                  <?php else:?>
+                        <td>Perempuan</td>
+                  <?php endif;?>
+                  <td><?php echo $pengguna_password;?></td>
+                  <td><?php echo $pengguna_nohp;?></td>
+                  <?php if($pengguna_level=='1'):?>
+                        <td>Administrator</td>
+                  <?php else:?>
+                        <td>Author</td>
+                  <?php endif;?>
+                  <td style="text-align:right;">
+                        <a class="btn" data-toggle="modal" data-target="#ModalEdit<?php echo $pengguna_id;?>"><span class="fa fa-pencil"></span></a>
+                        <a class="btn" href="<?php echo base_url().'admin/pengguna/reset_password/'.$pengguna_id;?>"><span class="fa fa-refresh"></span></a>
+                        <a class="btn" data-toggle="modal" data-target="#ModalHapus<?php echo $pengguna_id;?>"><span class="fa fa-trash"></span></a>
+                  </td>
+                </tr>
 									</tbody>
 								</table>
 							</div>
@@ -172,13 +182,6 @@
 	</div>
 </div>
 
-<?php foreach ($data->result_array() as $i) :
-	$ekskul_judul = $i['ekskul_judul'];
-	$ekskul_deskripsi = $i['ekskul_deskripsi'];
-	$ekskul_photo = $i['ekskul_photo'];
-	?>
-<?php endforeach; ?>
-
 <!--Modal Edit Ekskul-->
 <div class="modal fade" id="ModalEdit<?php echo $ekskul_id; ?>" tabindex="-1" role="dialog"
 	 aria-labelledby="myModalLabel">
@@ -196,7 +199,7 @@
 					<div class="form-group">
 						<label for="inputUserName" class="col-sm-4 control-label">Nama Ekstrakulikuler</label>
 						<div class="col-sm-7">
-							<input type="hidden" name="kode" value="<?php echo $pengguna_id; ?>"/>
+							<input type="hidden" name="kode" value="<?php echo $ekskul_id; ?>"/>
 							<input type="text" name="xnama" class="form-control" id="inputUserName"
 								   value="<?php echo $ekskul_judul; ?>" placeholder="Nama Lengkap" required>
 						</div>
@@ -210,32 +213,18 @@
 						</div>
 					</div>
 				</div>
-		</div>
-		<div class="form-group">
-			<label for="inputUserName" class="col-sm-4 control-label">Photo</label>
-			<div class="col-sm-7">
-				<input type="file" name="xphoto" class="form-control" value="<?php echo $ekskul_photo; ?>"
-					   id="inputfile" placeholder="photo" required>
 			</div>
-		</div>
-		<?php if ($pengguna_level == '1'): ?>
-			<option value="1" selected>Administrator</option>
-			<option value="2">Kepala Sekolah</option>
-		<?php else: ?>
-			<option value="1">Administrator</option>
-			<option value="2" selected>Author</option>
-		<?php endif; ?>
-	</div>
-</div>
-<div class="form-group">
-	<label for="inputUserName" class="col-sm-4 control-label">Photo</label>
-	<div class="col-sm-7">
-		<input type="file" name="filefoto"/>
-	</div>
-</div>
+					<div class="form-group">
+						<label for="inputUserName" class="col-sm-4 control-label">Photo</label>
+						<div class="col-sm-7">
+							<input type="file" name="xphoto" class="form-control" 
+							value="<?php echo $ekskul_photo; ?>" id="inputfile" placeholder="photo" required>
+				</div>
+					</div>
+				</div>
+			</div>
+			
 
-
-</div>
 <div class="modal-footer">
 	<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
 	<button type="submit" class="btn btn-primary btn-flat" id="simpan">Update</button>
@@ -245,12 +234,6 @@
 </div>
 </div>
 
-<?php foreach ($data->result_array() as $i) :
-	$ekskul_judul = $i['ekskul_judul'];
-	$ekskul_deskripsi = $i['ekskul_deskripsi'];
-	$ekskul_photo = $i['ekskul_photo'];
-	?>
-<?php endforeach; ?>
 
 	<!--Modal Hapus Ekskul-->
 	<div class="modal fade" id="ModalHapus<?php echo $ekskul_id; ?>" tabindex="-1" role="dialog"
@@ -263,10 +246,10 @@
 					<h4 class="modal-title" id="myModalLabel">Hapus Ekskul</h4>
 				</div>
 				<form class="form-horizontal"
-					  action="<?php echo base_url() . 'admin/ekskul/hapus_ekskul' . $pengguna_id; ?>" method="post"
+					  action="<?php echo base_url() . 'admin/ekskul/hapus_ekskul' . $ekskul_id; ?>" method="post"
 					  enctype="multipart/form-data">
 					<div class="modal-body">
-						<input type="hidden" name="kode" value="<?php echo $pengguna_id; ?>"/>
+						<input type="hidden" name="kode" value="<?php echo $ekskul_id; ?>"/>
 						<p>Apakah Anda yakin mau menghapus Ekskul <b><?php echo $ekskul_judul; ?></b> ?</p>
 
 					</div>
@@ -279,40 +262,7 @@
 		</div>
 	</div>
 
-
 <!--Modal Reset Password-->
-<div class="modal fade" id="ModalResetPassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-							aria-hidden="true"><span class="fa fa-close"></span></span></button>
-				<h4 class="modal-title" id="myModalLabel">Reset Password</h4>
-			</div>
-
-			<div class="modal-body">
-
-				<table>
-					<tr>
-						<th style="width:120px;">Username</th>
-						<th>:</th>
-						<th><?php echo $this->session->flashdata('uname'); ?></th>
-					</tr>
-					<tr>
-						<th style="width:120px;">Password Baru</th>
-						<th>:</th>
-						<th><?php echo $this->session->flashdata('upass'); ?></th>
-					</tr>
-				</table>
-
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-
-		</div>
-	</div>
-</div>
 
 
 <!-- jQuery 2.2.3 -->
