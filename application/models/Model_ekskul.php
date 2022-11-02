@@ -5,6 +5,16 @@ class Model_ekskul extends CI_Model{
 		$hsl=$this->db->query("SELECT ekskul.* FROM ekskul");
 		return $hsl;
 	}
+
+	function simpan_upload($judul,$image){
+        $data = array(
+                'judul' => $judul,
+                'gambar' => $image
+            );  
+        $result= $this->db->insert('tbl_galeri',$data);
+        return $result;
+    }
+
 	function simpan_ekskul($judul,$deskripsi,$photo){
 		
 		$hsl=$this->db->query("INSERT INTO ekskul(ekskul_judul,ekskul_deskripsi,ekskul_photo) VALUES ('$judul','$deskripsi','$photo')");

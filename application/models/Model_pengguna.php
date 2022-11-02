@@ -6,6 +6,15 @@ class Model_pengguna extends CI_Model{
 		return $hsl;	
 	}
 
+	function simpan_upload($judul,$image){
+        $data = array(
+                'judul' => $judul,
+                'gambar' => $image
+            );  
+        $result= $this->db->insert('tbl_galeri',$data);
+        return $result;
+    }
+
 	function simpan_pengguna($nama,$jenkel,$username,$password,$email,$nohp,$level,$gambar){
 		$hsl=$this->db->query("INSERT INTO pengguna (pengguna_nama,pengguna_jenkel,pengguna_username,pengguna_password,pengguna_email,pengguna_nohp,pengguna_level,pengguna_photo) VALUES ('$nama','$jenkel','$username',md5('$password'),'$email','$nohp','$level','$gambar')");
 		return $hsl;
