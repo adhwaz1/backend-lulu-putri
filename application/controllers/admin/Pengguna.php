@@ -39,7 +39,7 @@ class Pengguna extends CI_Controller
 		$this->load->view('admin/v_edit_pengguna', $x);
 	}
 
-	function simpan_pengguna()
+	function simpan_pengguna($gambar)
 	{
 		$config['upload_path'] = './assets/images/'; //path folder
 		$config['allowed_types'] = 'gif|jpg|png|jpeg|bmp'; //type yang dapat diakses bisa anda sesuaikan
@@ -61,7 +61,6 @@ class Pengguna extends CI_Controller
 				$this->image_lib->resize();
 
 				$gambar = $gbr['file_name'];
-				$gambar = $gbr['file_name'];
 				$nama = $this->input->post('xnama');
 				$jenkel = $this->input->post('xjenkel');
 				$username = $this->input->post('xusername');
@@ -71,7 +70,7 @@ class Pengguna extends CI_Controller
 				$nohp = $this->input->post('xkontak');
 				$level = $this->input->post('xlevel');
 				$gbr = $_FILES['foto'];
-				if ($foto = '') {
+				if ($foto = 'upload') {
 				} else {
 					$config['upload_path'] = './assets/images/';
 					$config['allowed_types'] = 'jpg|jpeg|png|gif';
@@ -133,7 +132,7 @@ class Pengguna extends CI_Controller
 			$judul = $this->input->post('judul');
 			$image = $data['upload_data']['file_name'];
 
-			$result = $this->m_upload->simpan_upload($judul, $image);
+			$result = $this->model_upload->simpan_upload($judul, $image);
 			echo json_decode($result);
 		}
 	}
@@ -171,7 +170,7 @@ class Pengguna extends CI_Controller
 				$email = $this->input->post('xemail');
 				$nohp = $this->input->post('xkontak');
 				$level = $this->input->post('xlevel');
-				$gambar = $this->input->post('xgambar');
+				//$gambar = $this->input->post('xgambar');
 				if (empty($password) && empty($konfirm_password)) {
 					$this->model_pengguna->update_pengguna_tanpa_pass($kode, $nama, $jenkel, $username, $password, $email, $nohp, $level, $gambar);
 					echo $this->session->set_flashdata('msg', 'info');
