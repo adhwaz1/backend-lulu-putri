@@ -89,19 +89,10 @@
 										<th>Photo</th>
 										<th>Nama Ekstrakulikuler</th>
 										<th>Deskripsi</th>
-
-										<?php
-										if ($this->session->userdata('akses') == '1') {
-											?>
-											<th style="text-align:right;">Aksi</th>
-										<?php } ?>
+								        <th style="text-align:center;">Aksi</th>
 									</tr>
-									</thead>
-									<tbody>
-
-									<?php foreach ($data->result_array() as $i) :
-										?>
-									<?php endforeach; ?>
+								</thead>
+							<tbody>
 									<tr>
 										<td>1</td>
 										<td><img width="40" height="40" class="img-circle"
@@ -114,7 +105,6 @@
 											<a class="btn" data-toggle="modal"><span class="fa fa-trash"></span></a>
 										</td>
 									</tr>
-
 									</tbody>
 								</table>
 							</div>
@@ -183,15 +173,14 @@
 </div>
 
 <?php foreach ($data->result_array() as $i) :
-	$pengguna_id = $i['pengguna_id'];
-	$pengguna_nama = $i['pengguna_nama'];
-	$pengguna_jenkel = $i['pengguna_deskripsi'];
-	$pengguna_photo = $i['pengguna_photo'];
+	$ekskul_judul = $i['ekskul_judul'];
+	$ekskul_deskripsi = $i['ekskul_deskripsi'];
+	$ekskul_photo = $i['ekskul_photo'];
 	?>
 <?php endforeach; ?>
 
 <!--Modal Edit Ekskul-->
-<div class="modal fade" id="ModalEdit<?php echo $pengguna_id; ?>" tabindex="-1" role="dialog"
+<div class="modal fade" id="ModalEdit<?php echo $ekskul_id; ?>" tabindex="-1" role="dialog"
 	 aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -200,7 +189,7 @@
 							aria-hidden="true"><span class="fa fa-close"></span></span></button>
 				<h4 class="modal-title" id="myModalLabel">Edit Ekskul</h4>
 			</div>
-			<form class="form-horizontal" action="<?php echo base_url() . 'admin/pengguna/update_pengguna' ?>"
+			<form class="form-horizontal" action="<?php echo base_url() . 'admin/ekskul/update_ekskul' ?>"
 				  method="post" enctype="multipart/form-data">
 				<div class="modal-body">
 
@@ -209,14 +198,14 @@
 						<div class="col-sm-7">
 							<input type="hidden" name="kode" value="<?php echo $pengguna_id; ?>"/>
 							<input type="text" name="xnama" class="form-control" id="inputUserName"
-								   value="<?php echo $pengguna_nama; ?>" placeholder="Nama Lengkap" required>
+								   value="<?php echo $ekskul_judul; ?>" placeholder="Nama Lengkap" required>
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="inputEmail3" class="col-sm-4 control-label">Deskripsi</label>
 						<div class="col-sm-7">
 							<input type="text" name="xdeskripsi" class="form-control"
-								   value="<?php echo $pengguna_deskripsi; ?>" id="inputDeskripsi"
+								   value="<?php echo $ekskul_deskripsi; ?>" id="inputDeskripsi"
 								   placeholder="Deskripsi" required>
 						</div>
 					</div>
@@ -225,7 +214,7 @@
 		<div class="form-group">
 			<label for="inputUserName" class="col-sm-4 control-label">Photo</label>
 			<div class="col-sm-7">
-				<input type="file" name="xphoto" class="form-control" value="<?php echo $pengguna_photo; ?>"
+				<input type="file" name="xphoto" class="form-control" value="<?php echo $ekskul_photo; ?>"
 					   id="inputfile" placeholder="photo" required>
 			</div>
 		</div>
@@ -257,14 +246,14 @@
 </div>
 
 <?php foreach ($data->result_array() as $i) :
-	$pengguna_id = $i['pengguna_id'];
-	$pengguna_nama = $i['pengguna_nama'];
-	$pengguna_jenkel = $i['pengguna_deskripsi'];
-	$pengguna_photo = $i['pengguna_photo'];
+	$ekskul_judul = $i['ekskul_judul'];
+	$ekskul_deskripsi = $i['ekskul_deskripsi'];
+	$ekskul_photo = $i['ekskul_photo'];
 	?>
+<?php endforeach; ?>
 
 	<!--Modal Hapus Ekskul-->
-	<div class="modal fade" id="ModalHapus<?php echo $pengguna_id; ?>" tabindex="-1" role="dialog"
+	<div class="modal fade" id="ModalHapus<?php echo $ekskul_id; ?>" tabindex="-1" role="dialog"
 		 aria-labelledby="myModalLabel">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -274,11 +263,11 @@
 					<h4 class="modal-title" id="myModalLabel">Hapus Ekskul</h4>
 				</div>
 				<form class="form-horizontal"
-					  action="<?php echo base_url() . 'admin/pengguna/hapus_ekskul' . $pengguna_id; ?>" method="post"
+					  action="<?php echo base_url() . 'admin/ekskul/hapus_ekskul' . $pengguna_id; ?>" method="post"
 					  enctype="multipart/form-data">
 					<div class="modal-body">
 						<input type="hidden" name="kode" value="<?php echo $pengguna_id; ?>"/>
-						<p>Apakah Anda yakin mau menghapus Pengguna <b><?php echo $pengguna_nama; ?></b> ?</p>
+						<p>Apakah Anda yakin mau menghapus Ekskul <b><?php echo $ekskul_judul; ?></b> ?</p>
 
 					</div>
 					<div class="modal-footer">
@@ -289,7 +278,7 @@
 			</div>
 		</div>
 	</div>
-<?php endforeach; ?>
+
 
 <!--Modal Reset Password-->
 <div class="modal fade" id="ModalResetPassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

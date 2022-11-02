@@ -8,13 +8,43 @@ class Ekskul extends CI_Controller{
         };
 		$this->load->model('model_ekskul');
 		$this->load->library('upload');
+		$this->load->model('model_kategori');
 	}
-
 
 	function index(){
-		$x['data']=$this->model_ekskul->get_all_ekskul();
+		$x['data']=$this->model_kategori->get_all_kategori();
 		$this->load->view('admin/v_ekskul',$x);
 	}
+
+
+	function add_ekskul(){
+		$x['kat']=$this->model_kategori->get_all_kategori();
+		$this->load->view('admin/v_add_ekskul;',$x);
+    }
+
+	function get_edit(){
+		$kode=$this->uri->segment(4);
+		$x['data']=$this->model_tulisan->get_tulisan_by_kode($kode);
+		$x['kat']=$this->model_kategori->get_all_kategori();
+		$this->load->view('admin/v_edit_ekskul',$x);
+    }
+
+	function do_upload(){
+		$config['upload_path']="./assets/images";
+		$config['allowed_types']='gif|jpg|png';
+		$config['encrypt_name'] = TRUE;
+		 
+		$this->load->library('upload',$config);
+		if($this->upload->do_upload("file")){
+			$data = array('upload_data' => $this->upload->data());
+	
+			$judul= $this->input->post('judul');
+			$image= $data['upload_data']['file_name']; 
+			 
+			$result= $this->m_upload->simpan_upload($judul,$image);
+			echo json_decode($result);
+		}
+	 }
 
 	function simpan_ekskul(){
 		$config['upload_path'] = './assets/images/'; //path folder
@@ -39,7 +69,7 @@ class Ekskul extends CI_Controller{
 	                        $this->image_lib->resize();
 
 	                        $photo=$gbr['file_name'];
-							$judul=$this->input->post('ekskul_nama');
+							$judul=$this->input->post('ekskul_judul');
 							$deskripsi=$this->input->post('ekskul_deskripsi');
 							$this->model_ekskul->simpan_ekskul($judul,$deskripsi,$photo);
 							
@@ -51,7 +81,7 @@ class Ekskul extends CI_Controller{
 	                }
 	                 
 	            }else{
-					$judul=$this->input->post('ekskul_nama');
+					$judul=$this->input->post('ekskul_judul');
 							$deskripsi=$this->input->post('ekskul_deskripsi');
 
 					$this->model_ekskul->simpan_ekskul_tanpa_img($judul,$deskripsi);
@@ -89,7 +119,7 @@ class Ekskul extends CI_Controller{
 
 					$photo=$gbr['file_name'];
 					$kode=$this->input->post('kode');
-					$judul=$this->input->post('ekskul_nama');
+					$judul=$this->input->post('ekskul_judul');
 					$deskripsi=$this->input->post('ekskul_deskripsi');
 
 					$this->model_ekskul->update_ekskul($kode,$judul,$deskripsi,$photo);
@@ -104,7 +134,7 @@ class Ekskul extends CI_Controller{
 		}else{
 					
 					$kode=$this->input->post('kode');
-					$judul=$this->input->post('ekskul_nama');
+					$judul=$this->input->post('ekskul_judul');
 					$deskripsi=$this->input->post('ekskul_deskripsi');
 
 					$this->model_ekskul->update_ekskul_tanpa_img($kode,$judul,$deskripsi);
@@ -118,5 +148,23 @@ class Ekskul extends CI_Controller{
 		echo $this->session->set_flashdata('msg','success-hapus');
 		redirect('admin/ekskul');
 	}
+
+	function reset_password(){
+   
+		$id=$this->uri->segment(4);
+		$get=$this->model_ekskul->getusername($id);
+		if($get->num_rows()>0){
+			$a=$get->row_array();
+			$b=$a['pengguna_username'];
+		}
+		$pass=rand(123456,999999);
+		$this->model_ekskul->resetpass($id,$pass);
+		echo $this->session->set_flashdata('msg','show-modal');
+		echo $this->session->set_flashdata('uname',$b);
+		echo $this->session->set_flashdata('upass',$pass);
+		redirect('admin/ekskul');
+	
+	}
+	
 
 }
