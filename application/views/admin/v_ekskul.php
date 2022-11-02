@@ -89,10 +89,10 @@
 										<th>Photo</th>
 										<th>Nama Ekstrakulikuler</th>
 										<th>Deskripsi</th>
-								        <th style="text-align:center;">Aksi</th>
+										<th style="text-align:center;">Aksi</th>
 									</tr>
-								</thead>
-							<tbody>
+									</thead>
+									<tbody>
 									<tr>
 										<td>1</td>
 										<td><img width="40" height="40" class="img-circle"
@@ -252,32 +252,32 @@
 	?>
 <?php endforeach; ?>
 
-	<!--Modal Hapus Ekskul-->
-	<div class="modal fade" id="ModalHapus<?php echo $ekskul_id; ?>" tabindex="-1" role="dialog"
-		 aria-labelledby="myModalLabel">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-								aria-hidden="true"><span class="fa fa-close"></span></span></button>
-					<h4 class="modal-title" id="myModalLabel">Hapus Ekskul</h4>
-				</div>
-				<form class="form-horizontal"
-					  action="<?php echo base_url() . 'admin/ekskul/hapus_ekskul' . $pengguna_id; ?>" method="post"
-					  enctype="multipart/form-data">
-					<div class="modal-body">
-						<input type="hidden" name="kode" value="<?php echo $pengguna_id; ?>"/>
-						<p>Apakah Anda yakin mau menghapus Ekskul <b><?php echo $ekskul_judul; ?></b> ?</p>
-
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary btn-flat" id="simpan">Hapus</button>
-					</div>
-				</form>
+<!--Modal Hapus Ekskul-->
+<div class="modal fade" id="ModalHapus<?php echo $ekskul_id; ?>" tabindex="-1" role="dialog"
+	 aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+							aria-hidden="true"><span class="fa fa-close"></span></span></button>
+				<h4 class="modal-title" id="myModalLabel">Hapus Ekskul</h4>
 			</div>
+			<form class="form-horizontal"
+				  action="<?php echo base_url() . 'admin/ekskul/hapus_ekskul' . $pengguna_id; ?>" method="post"
+				  enctype="multipart/form-data">
+				<div class="modal-body">
+					<input type="hidden" name="kode" value="<?php echo $pengguna_id; ?>"/>
+					<p>Apakah Anda yakin mau menghapus Ekskul <b><?php echo $ekskul_judul; ?></b> ?</p>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary btn-flat" id="simpan">Hapus</button>
+				</div>
+			</form>
 		</div>
 	</div>
+</div>
 
 
 <!--Modal Reset Password-->

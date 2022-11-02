@@ -1,4 +1,5 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+
 /**
  * jsmin.php - PHP implementation of Douglas Crockford's JSMin.
  *
@@ -44,309 +45,316 @@
  * @version 1.1.1 (2008-03-02)
  * @link https://github.com/rgrove/jsmin-php/
  */
+class JSMin
+{
+	const ORD_LF = 10;
+	const ORD_SPACE = 32;
+	const ACTION_KEEP_A = 1;
+	const ACTION_DELETE_A = 2;
+	const ACTION_DELETE_A_B = 3;
 
-class JSMin {
-  const ORD_LF            = 10;
-  const ORD_SPACE         = 32;
-  const ACTION_KEEP_A     = 1;
-  const ACTION_DELETE_A   = 2;
-  const ACTION_DELETE_A_B = 3;
+	protected $a = '';
+	protected $b = '';
+	protected $input = '';
+	protected $inputIndex = 0;
+	protected $inputLength = 0;
+	protected $lookAhead = null;
+	protected $output = '';
 
-  protected $a           = '';
-  protected $b           = '';
-  protected $input       = '';
-  protected $inputIndex  = 0;
-  protected $inputLength = 0;
-  protected $lookAhead   = null;
-  protected $output      = '';
+	// -- Protected Instance Methods ---------------------------------------------
 
-  // -- Protected Instance Methods ---------------------------------------------
+	/**
+	 * Perform minification, return result
+	 *
+	 * @return string
+	 * @uses isAlphaNum()
+	 * @uses action()
+	 */
+	function min($js)
+	{
 
-  /**
-   * Action -- do something! What to do is determined by the $command argument.
-   *
-   * action treats a string as a single character. Wow!
-   * action recognizes a regular expression if it is preceded by ( or , or =.
-   *
-   * @uses next()
-   * @uses get()
-   * @throws JSMinException If parser errors are found:
-   *         - Unterminated string literal
-   *         - Unterminated regular expression set in regex literal
-   *         - Unterminated regular expression literal
-   * @param int $command One of class constants:
-   *      ACTION_KEEP_A      Output A. Copy B to A. Get the next B.
-   *      ACTION_DELETE_A    Copy B to A. Get the next B. (Delete A).
-   *      ACTION_DELETE_A_B  Get the next B. (Delete B).
-  */
-  protected function action($command) {
-    switch($command) {
-      case self::ACTION_KEEP_A:
-        $this->output .= $this->a;
+		$this->input = str_replace("\r\n", "\n", $js);
+		$this->inputLength = strlen($this->input);
 
-      case self::ACTION_DELETE_A:
-        $this->a = $this->b;
+		$this->a = "\n";
+		$this->action(self::ACTION_DELETE_A_B);
 
-        if ($this->a === "'" || $this->a === '"') {
-          for (;;) {
-            $this->output .= $this->a;
-            $this->a       = $this->get();
+		while ($this->a !== null) {
+			switch ($this->a) {
+				case ' ':
+					if ($this->isAlphaNum($this->b)) {
+						$this->action(self::ACTION_KEEP_A);
+					} else {
+						$this->action(self::ACTION_DELETE_A);
+					}
+					break;
 
-            if ($this->a === $this->b) {
-              break;
-            }
+				case "\n":
+					switch ($this->b) {
+						case '{':
+						case '[':
+						case '(':
+						case '+':
+						case '-':
+							$this->action(self::ACTION_KEEP_A);
+							break;
 
-            if (ord($this->a) <= self::ORD_LF) {
-              throw new JSMinException('Unterminated string literal.');
-            }
+						case ' ':
+							$this->action(self::ACTION_DELETE_A_B);
+							break;
 
-            if ($this->a === '\\') {
-              $this->output .= $this->a;
-              $this->a       = $this->get();
-            }
-          }
-        }
+						default:
+							if ($this->isAlphaNum($this->b)) {
+								$this->action(self::ACTION_KEEP_A);
+							} else {
+								$this->action(self::ACTION_DELETE_A);
+							}
+					}
+					break;
 
-      case self::ACTION_DELETE_A_B:
-        $this->b = $this->next();
+				default:
+					switch ($this->b) {
+						case ' ':
+							if ($this->isAlphaNum($this->a)) {
+								$this->action(self::ACTION_KEEP_A);
+								break;
+							}
 
-        if ($this->b === '/' && (
-            $this->a === '(' || $this->a === ',' || $this->a === '=' ||
-            $this->a === ':' || $this->a === '[' || $this->a === '!' ||
-            $this->a === '&' || $this->a === '|' || $this->a === '?' ||
-            $this->a === '{' || $this->a === '}' || $this->a === ';' ||
-            $this->a === "\n" )) {
+							$this->action(self::ACTION_DELETE_A_B);
+							break;
 
-          $this->output .= $this->a . $this->b;
+						case "\n":
+							switch ($this->a) {
+								case '}':
+								case ']':
+								case ')':
+								case '+':
+								case '-':
+								case '"':
+								case "'":
+									$this->action(self::ACTION_KEEP_A);
+									break;
 
-          for (;;) {
-            $this->a = $this->get();
+								default:
+									if ($this->isAlphaNum($this->a)) {
+										$this->action(self::ACTION_KEEP_A);
+									} else {
+										$this->action(self::ACTION_DELETE_A_B);
+									}
+							}
+							break;
 
-            if ($this->a === '[') {
-              /*
-                inside a regex [...] set, which MAY contain a '/' itself. Example: mootools Form.Validator near line 460:
-                  return Form.Validator.getValidator('IsEmpty').test(element) || (/^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]\.?){0,63}[a-z0-9!#$%&'*+/=?^_`{|}~-]@(?:(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)*[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\])$/i).test(element.get('value'));
-              */
-              for (;;) {
-                $this->output .= $this->a;
-                $this->a = $this->get();
+						default:
+							$this->action(self::ACTION_KEEP_A);
+							break;
+					}
+			}
+		}
 
-                if ($this->a === ']') {
-                    break;
-                } elseif ($this->a === '\\') {
-                  $this->output .= $this->a;
-                  $this->a       = $this->get();
-                } elseif (ord($this->a) <= self::ORD_LF) {
-                  throw new JSMinException('Unterminated regular expression set in regex literal.');
-                }
-              }
-            } elseif ($this->a === '/') {
-              break;
-            } elseif ($this->a === '\\') {
-              $this->output .= $this->a;
-              $this->a       = $this->get();
-            } elseif (ord($this->a) <= self::ORD_LF) {
-              throw new JSMinException('Unterminated regular expression literal.');
-            }
+		return $this->output;
+	}
 
-            $this->output .= $this->a;
-          }
+	/**
+	 * Action -- do something! What to do is determined by the $command argument.
+	 *
+	 * action treats a string as a single character. Wow!
+	 * action recognizes a regular expression if it is preceded by ( or , or =.
+	 *
+	 * @param int $command One of class constants:
+	 *      ACTION_KEEP_A      Output A. Copy B to A. Get the next B.
+	 *      ACTION_DELETE_A    Copy B to A. Get the next B. (Delete A).
+	 *      ACTION_DELETE_A_B  Get the next B. (Delete B).
+	 * @throws JSMinException If parser errors are found:
+	 *         - Unterminated string literal
+	 *         - Unterminated regular expression set in regex literal
+	 *         - Unterminated regular expression literal
+	 * @uses next()
+	 * @uses get()
+	 */
+	protected function action($command)
+	{
+		switch ($command) {
+			case self::ACTION_KEEP_A:
+				$this->output .= $this->a;
 
-          $this->b = $this->next();
-        }
-    }
-  }
+			case self::ACTION_DELETE_A:
+				$this->a = $this->b;
 
-  /**
-   * Get next char. Convert ctrl char to space.
-   *
-   * @return string|null
-   */
-  protected function get() {
-    $c = $this->lookAhead;
-    $this->lookAhead = null;
+				if ($this->a === "'" || $this->a === '"') {
+					for (; ;) {
+						$this->output .= $this->a;
+						$this->a = $this->get();
 
-    if ($c === null) {
-      if ($this->inputIndex < $this->inputLength) {
-        $c = substr($this->input, $this->inputIndex, 1);
-        $this->inputIndex += 1;
-      } else {
-        $c = null;
-      }
-    }
+						if ($this->a === $this->b) {
+							break;
+						}
 
-    if ($c === "\r") {
-      return "\n";
-    }
+						if (ord($this->a) <= self::ORD_LF) {
+							throw new JSMinException('Unterminated string literal.');
+						}
 
-    if ($c === null || $c === "\n" || ord($c) >= self::ORD_SPACE) {
-      return $c;
-    }
+						if ($this->a === '\\') {
+							$this->output .= $this->a;
+							$this->a = $this->get();
+						}
+					}
+				}
 
-    return ' ';
-  }
+			case self::ACTION_DELETE_A_B:
+				$this->b = $this->next();
 
-  /**
-   * Is $c a letter, digit, underscore, dollar sign, or non-ASCII character.
-   *
-   * @return bool
-   */
-  protected function isAlphaNum($c) {
-    return ord($c) > 126 || $c === '\\' || preg_match('/^[\w\$]$/', $c) === 1;
-  }
+				if ($this->b === '/' && (
+						$this->a === '(' || $this->a === ',' || $this->a === '=' ||
+						$this->a === ':' || $this->a === '[' || $this->a === '!' ||
+						$this->a === '&' || $this->a === '|' || $this->a === '?' ||
+						$this->a === '{' || $this->a === '}' || $this->a === ';' ||
+						$this->a === "\n")) {
 
-  /**
-   * Perform minification, return result
-   *
-   * @uses action()
-   * @uses isAlphaNum()
-   * @return string
-   */
-  function min($js) {
-  	
-  	$this->input       = str_replace("\r\n", "\n", $js);
-    $this->inputLength = strlen($this->input);
-  	
-    $this->a = "\n";
-    $this->action(self::ACTION_DELETE_A_B);
+					$this->output .= $this->a . $this->b;
 
-    while ($this->a !== null) {
-      switch ($this->a) {
-        case ' ':
-          if ($this->isAlphaNum($this->b)) {
-            $this->action(self::ACTION_KEEP_A);
-          } else {
-            $this->action(self::ACTION_DELETE_A);
-          }
-          break;
+					for (; ;) {
+						$this->a = $this->get();
 
-        case "\n":
-          switch ($this->b) {
-            case '{':
-            case '[':
-            case '(':
-            case '+':
-            case '-':
-              $this->action(self::ACTION_KEEP_A);
-              break;
+						if ($this->a === '[') {
+							/*
+							  inside a regex [...] set, which MAY contain a '/' itself. Example: mootools Form.Validator near line 460:
+								return Form.Validator.getValidator('IsEmpty').test(element) || (/^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]\.?){0,63}[a-z0-9!#$%&'*+/=?^_`{|}~-]@(?:(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)*[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\])$/i).test(element.get('value'));
+							*/
+							for (; ;) {
+								$this->output .= $this->a;
+								$this->a = $this->get();
 
-            case ' ':
-              $this->action(self::ACTION_DELETE_A_B);
-              break;
+								if ($this->a === ']') {
+									break;
+								} elseif ($this->a === '\\') {
+									$this->output .= $this->a;
+									$this->a = $this->get();
+								} elseif (ord($this->a) <= self::ORD_LF) {
+									throw new JSMinException('Unterminated regular expression set in regex literal.');
+								}
+							}
+						} elseif ($this->a === '/') {
+							break;
+						} elseif ($this->a === '\\') {
+							$this->output .= $this->a;
+							$this->a = $this->get();
+						} elseif (ord($this->a) <= self::ORD_LF) {
+							throw new JSMinException('Unterminated regular expression literal.');
+						}
 
-            default:
-              if ($this->isAlphaNum($this->b)) {
-                $this->action(self::ACTION_KEEP_A);
-              }
-              else {
-                $this->action(self::ACTION_DELETE_A);
-              }
-          }
-          break;
+						$this->output .= $this->a;
+					}
 
-        default:
-          switch ($this->b) {
-            case ' ':
-              if ($this->isAlphaNum($this->a)) {
-                $this->action(self::ACTION_KEEP_A);
-                break;
-              }
+					$this->b = $this->next();
+				}
+		}
+	}
 
-              $this->action(self::ACTION_DELETE_A_B);
-              break;
+	/**
+	 * Get next char. Convert ctrl char to space.
+	 *
+	 * @return string|null
+	 */
+	protected function get()
+	{
+		$c = $this->lookAhead;
+		$this->lookAhead = null;
 
-            case "\n":
-              switch ($this->a) {
-                case '}':
-                case ']':
-                case ')':
-                case '+':
-                case '-':
-                case '"':
-                case "'":
-                  $this->action(self::ACTION_KEEP_A);
-                  break;
+		if ($c === null) {
+			if ($this->inputIndex < $this->inputLength) {
+				$c = substr($this->input, $this->inputIndex, 1);
+				$this->inputIndex += 1;
+			} else {
+				$c = null;
+			}
+		}
 
-                default:
-                  if ($this->isAlphaNum($this->a)) {
-                    $this->action(self::ACTION_KEEP_A);
-                  }
-                  else {
-                    $this->action(self::ACTION_DELETE_A_B);
-                  }
-              }
-              break;
+		if ($c === "\r") {
+			return "\n";
+		}
 
-            default:
-              $this->action(self::ACTION_KEEP_A);
-              break;
-          }
-      }
-    }
+		if ($c === null || $c === "\n" || ord($c) >= self::ORD_SPACE) {
+			return $c;
+		}
 
-    return $this->output;
-  }
+		return ' ';
+	}
 
-  /**
-   * Get the next character, skipping over comments. peek() is used to see
-   *  if a '/' is followed by a '/' or '*'.
-   *
-   * @uses get()
-   * @uses peek()
-   * @throws JSMinException On unterminated comment.
-   * @return string
-   */
-  protected function next() {
-    $c = $this->get();
+	/**
+	 * Get the next character, skipping over comments. peek() is used to see
+	 *  if a '/' is followed by a '/' or '*'.
+	 *
+	 * @return string
+	 * @throws JSMinException On unterminated comment.
+	 * @uses get()
+	 * @uses peek()
+	 */
+	protected function next()
+	{
+		$c = $this->get();
 
-    if ($c === '/') {
-      switch($this->peek()) {
-        case '/':
-          for (;;) {
-            $c = $this->get();
+		if ($c === '/') {
+			switch ($this->peek()) {
+				case '/':
+					for (; ;) {
+						$c = $this->get();
 
-            if (ord($c) <= self::ORD_LF) {
-              return $c;
-            }
-          }
+						if (ord($c) <= self::ORD_LF) {
+							return $c;
+						}
+					}
 
-        case '*':
-          $this->get();
+				case '*':
+					$this->get();
 
-          for (;;) {
-            switch($this->get()) {
-              case '*':
-                if ($this->peek() === '/') {
-                  $this->get();
-                  return ' ';
-                }
-                break;
+					for (; ;) {
+						switch ($this->get()) {
+							case '*':
+								if ($this->peek() === '/') {
+									$this->get();
+									return ' ';
+								}
+								break;
 
-              case null:
-                throw new JSMinException('Unterminated comment.');
-            }
-          }
+							case null:
+								throw new JSMinException('Unterminated comment.');
+						}
+					}
 
-        default:
-          return $c;
-      }
-    }
+				default:
+					return $c;
+			}
+		}
 
-    return $c;
-  }
+		return $c;
+	}
 
-  /**
-   * Get next char. If is ctrl character, translate to a space or newline.
-   *
-   * @uses get()
-   * @return string|null
-   */
-  protected function peek() {
-    $this->lookAhead = $this->get();
-    return $this->lookAhead;
-  }
+	/**
+	 * Get next char. If is ctrl character, translate to a space or newline.
+	 *
+	 * @return string|null
+	 * @uses get()
+	 */
+	protected function peek()
+	{
+		$this->lookAhead = $this->get();
+		return $this->lookAhead;
+	}
+
+	/**
+	 * Is $c a letter, digit, underscore, dollar sign, or non-ASCII character.
+	 *
+	 * @return bool
+	 */
+	protected function isAlphaNum($c)
+	{
+		return ord($c) > 126 || $c === '\\' || preg_match('/^[\w\$]$/', $c) === 1;
+	}
 }
 
 // -- Exceptions ---------------------------------------------------------------
-class JSMinException extends Exception {}
+class JSMinException extends Exception
+{
+}
+
 ?>
