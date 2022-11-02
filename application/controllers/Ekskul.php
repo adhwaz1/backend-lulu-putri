@@ -13,7 +13,7 @@ class Ekskul extends CI_Controller{
         else:
             $offset = $page;
         endif;
-        $limit=4;
+        $limit=3;
         $config['base_url'] = base_url() . 'ekskul/index/';
             $config['total_rows'] = $jum->num_rows();
             $config['per_page'] = $limit;
