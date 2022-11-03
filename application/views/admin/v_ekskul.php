@@ -89,32 +89,22 @@
 										<th>Photo</th>
 										<th>Nama Ekstrakulikuler</th>
 										<th>Deskripsi</th>
-								        <th style="text-align:center;">Aksi</th>
+										<th style="text-align:center;">Aksi</th>
 									</tr>
 								</thead>
 							<tbody>
-							<tr>
-                <td><img width="40" height="40" class="img-circle" src="<?php echo base_url().'assets/images/'.$pengguna_photo;?>"></td>
-                  <td><?php echo $judul_ekskul;?></td>
-                  <td><?php echo $pengguna_email;?></td>
-                  <?php if($pengguna_jenkel=='L'):?>
-                        <td>Laki-Laki</td>
-                  <?php else:?>
-                        <td>Perempuan</td>
-                  <?php endif;?>
-                  <td><?php echo $pengguna_password;?></td>
-                  <td><?php echo $pengguna_nohp;?></td>
-                  <?php if($pengguna_level=='1'):?>
-                        <td>Administrator</td>
-                  <?php else:?>
-                        <td>Author</td>
-                  <?php endif;?>
-                  <td style="text-align:right;">
-                        <a class="btn" data-toggle="modal" data-target="#ModalEdit<?php echo $pengguna_id;?>"><span class="fa fa-pencil"></span></a>
-                        <a class="btn" href="<?php echo base_url().'admin/pengguna/reset_password/'.$pengguna_id;?>"><span class="fa fa-refresh"></span></a>
-                        <a class="btn" data-toggle="modal" data-target="#ModalHapus<?php echo $pengguna_id;?>"><span class="fa fa-trash"></span></a>
-                  </td>
-                </tr>
+									<tr>
+										<td>1</td>
+										<td><img width="40" height="40" class="img-circle"
+												 src="<?php echo base_url() ?>tampilan/gambar/jurusan.png"></td>
+
+										<td>Coding</td>
+										<td>Coding Aja</td>
+										<td style="text-align:right;">
+											<a class="btn" data-toggle="modal"><span class="fa fa-pencil"></span></a>
+											<a class="btn" data-toggle="modal"><span class="fa fa-trash"></span></a>
+										</td>
+									</tr>
 									</tbody>
 								</table>
 							</div>
@@ -246,21 +236,21 @@
 					<h4 class="modal-title" id="myModalLabel">Hapus Ekskul</h4>
 				</div>
 				<form class="form-horizontal"
-					  action="<?php echo base_url() . 'admin/ekskul/hapus_ekskul' . $ekskul_id; ?>" method="post"
+					  action="<?php echo base_url() . 'admin/ekskul/hapus_ekskul' . $pengguna_id; ?>" method="post"
 					  enctype="multipart/form-data">
 					<div class="modal-body">
-						<input type="hidden" name="kode" value="<?php echo $ekskul_id; ?>"/>
+						<input type="hidden" name="kode" value="<?php echo $pengguna_id; ?>"/>
 						<p>Apakah Anda yakin mau menghapus Ekskul <b><?php echo $ekskul_judul; ?></b> ?</p>
 
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary btn-flat" id="simpan">Hapus</button>
-					</div>
-				</form>
-			</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary btn-flat" id="simpan">Hapus</button>
+				</div>
+			</form>
 		</div>
 	</div>
+</div>
 
 <!--Modal Reset Password-->
 
