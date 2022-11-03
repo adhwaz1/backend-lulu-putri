@@ -93,6 +93,7 @@
 									</tr>
 								</thead>
 							<tbody>
+<<<<<<< Updated upstream
 							
 							<?php foreach ($data->result_array() as $i):
 										$ekskul_id = $i['ekskul_id'];
@@ -118,6 +119,20 @@
 											</td>
 										</tr>
 									<?php endforeach; ?>
+=======
+									<tr>
+										<td                                       >1</td>
+										<td><img width="40" height="40" class="img-circle"
+												 src="<?php echo base_url() ?>tampilan/gambar/jurusan.png"></td>
+
+										<td>Coding</td>
+										<td>Coding Aja</td>
+										<td style="text-align:right;">
+											<a class="btn" data-toggle="modal"><span class="fa fa-pencil"></span></a>
+											<a class="btn" data-toggle="modal"><span class="fa fa-trash"></span></a>
+										</td>
+									</tr>
+>>>>>>> Stashed changes
 									</tbody>
 								</table>
 							</div>
