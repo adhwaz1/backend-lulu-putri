@@ -38,7 +38,7 @@ class Pengguna extends CI_Controller
 		$x['kat'] = $this->model_kategori->get_all_kategori();
 		$this->load->view('admin/v_edit_pengguna', $x);
 	}
-
+ 
 	function simpan_pengguna($gambar)
 	{
 		$config['upload_path'] = './assets/images/'; //path folder

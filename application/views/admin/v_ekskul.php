@@ -93,18 +93,31 @@
 									</tr>
 								</thead>
 							<tbody>
-									<tr>
-										<td>1</td>
-										<td><img width="40" height="40" class="img-circle"
-												 src="<?php echo base_url() ?>tampilan/gambar/jurusan.png"></td>
+							
+							<?php foreach ($data->result_array() as $i):
+										$ekskul_id = $i['ekskul_id'];
+										$ekskul_judul = $i['ekskul_judul'];
+										$ekskul_deskripsi= $i['ekskul_deskripsi'];
+										$ekskul_photo = $i['ekskul_photo'];
+										?>
 
-										<td>Coding</td>
-										<td>Coding Aja</td>
-										<td style="text-align:right;">
-											<a class="btn" data-toggle="modal"><span class="fa fa-pencil"></span></a>
-											<a class="btn" data-toggle="modal"><span class="fa fa-trash"></span></a>
-										</td>
-									</tr>
+										<tr>
+											<td><img width="40" height="40" class="img-circle"
+													 src="<?php echo base_url() . 'assets/images/' . $ekskul_photo; ?>">
+											</td>
+											<td><?php echo $ekskul_judul; ?></td>
+											<td><?php echo $ekskul_deskripsi; ?></td>
+							
+											<td style="text-align:right;">
+												<a class="btn" data-toggle="modal"
+												   data-target="#ModalEdit<?php echo $ekskul_id; ?>"><span
+															class="fa fa-pencil"></span></a>
+												<a class="btn" data-toggle="modal"
+												   data-target="#ModalHapus<?php echo $ekskul_id; ?>"><span
+															class="fa fa-trash"></span></a>
+											</td>
+										</tr>
+									<?php endforeach; ?>
 									</tbody>
 								</table>
 							</div>
@@ -127,6 +140,7 @@
 	<div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
+
 
 <!--Modal Add Ekskul-->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

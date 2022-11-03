@@ -11,19 +11,19 @@ class Ekskul extends CI_Controller
 		}
 		$this->load->model('model_ekskul');
 		$this->load->library('upload');
-		$this->load->model('model_kategori');
+		$this->load->model('model_ekskul');
 	}
 
 	function index()
 	{
-		$x['data'] = $this->model_kategori->get_all_kategori();
+		$x['data'] = $this->model_ekskul->get_all_ekskul();
 		$this->load->view('admin/v_ekskul', $x);
 	}
 
 
 	function add_ekskul()
 	{
-		$x['kat'] = $this->model_kategori->get_all_kategori();
+		$x['kat'] = $this->model_ekskul->get_all_ekskul();
 		$this->load->view('admin/v_add_ekskul;', $x);
 	}
 
@@ -31,7 +31,7 @@ class Ekskul extends CI_Controller
 	{
 		$kode = $this->uri->segment(4);
 		$x['data'] = $this->model_tulisan->get_tulisan_by_kode($kode);
-		$x['kat'] = $this->model_kategori->get_all_kategori();
+		$x['kat'] = $this->model_ekskul->get_all_ekskul();
 		$this->load->view('admin/v_edit_ekskul', $x);
 	}
 
