@@ -60,7 +60,8 @@
 				<small></small>
 			</h1>
 			<ol class="breadcrumb">
-				<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+				<li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+				<li><a href="#">Ekstrakulikuler</a></li>
 				<li class="active">Data Ekstrakulikuler</li>
 			</ol>
 		</section>
@@ -80,6 +81,7 @@
 												class="fa fa-plus"></span> Add Ekstrakulikuler</a>
 								</div>
 							<?php } ?>
+							
 							<!-- /.box-header -->
 							<div class="box-body">
 								<table id="example1" class="table table-striped" style="font-size:12px;">
@@ -93,9 +95,10 @@
 									</tr>
 								</thead>
 							<tbody>
-<<<<<<< Updated upstream
-							
+							<?php 
+							$No = 1?>
 							<?php foreach ($data->result_array() as $i):
+										
 										$ekskul_id = $i['ekskul_id'];
 										$ekskul_judul = $i['ekskul_judul'];
 										$ekskul_deskripsi= $i['ekskul_deskripsi'];
@@ -103,9 +106,12 @@
 										?>
 
 										<tr>
-											<td><img width="40" height="40" class="img-circle"
-													 src="<?php echo base_url() . 'assets/images/' . $ekskul_photo; ?>">
-											</td>
+											<td><?php echo $No++; ?></td>
+											<?php if(empty($ekskul_photo)):?>
+											<td><img width="40" height="40" class="img-circle" src="<?php echo base_url().'assets/images/user_blank.png';?>"></td>
+                 							<?php else:?>
+                  							<td><img width="40" height="40" class="img-circle" src="<?php echo base_url().'assets/images/'.$ekskul_photo;?>"></td>
+                  							<?php endif;?>
 											<td><?php echo $ekskul_judul; ?></td>
 											<td><?php echo $ekskul_deskripsi; ?></td>
 							
@@ -119,20 +125,6 @@
 											</td>
 										</tr>
 									<?php endforeach; ?>
-=======
-									<tr>
-										<td                                       >1</td>
-										<td><img width="40" height="40" class="img-circle"
-												 src="<?php echo base_url() ?>tampilan/gambar/jurusan.png"></td>
-
-										<td>Coding</td>
-										<td>Coding Aja</td>
-										<td style="text-align:right;">
-											<a class="btn" data-toggle="modal"><span class="fa fa-pencil"></span></a>
-											<a class="btn" data-toggle="modal"><span class="fa fa-trash"></span></a>
-										</td>
-									</tr>
->>>>>>> Stashed changes
 									</tbody>
 								</table>
 							</div>
@@ -166,8 +158,8 @@
 							aria-hidden="true"><span class="fa fa-close"></span></span></button>
 				<h4 class="modal-title" id="myModalLabel">Add Ekskul</h4>
 			</div>
-			<form class="form-horizontal" action="<?php echo base_url() . 'admin/ekskul/simpan_ekskul' ?>" method="post"
-				  enctype="multipart/form-data">
+			<form class="form-horizontal" action="<?php echo base_url() . 'admin/ekskul/simpan_ekskul' ?>"
+			 method="post" enctype="multipart/form-data">
 				<div class="modal-body">
 
 					<div class="form-group">
@@ -178,9 +170,9 @@
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="inputEmail3" class="col-sm-4 control-label">Deskripsi</label>
+						<label for="inputdeskripsi" class="col-sm-4 control-label">Deskripsi</label>
 						<div class="col-sm-7">
-							<input type="text" name="xdeskripsi" class="form-control" id="inputDeskripsi"
+							<input type="text" name="xdeskripsi" class="form-control" id="inputdeskripsi"
 								   placeholder="Deskripsi" required>
 						</div>
 					</div>
@@ -201,6 +193,13 @@
 	</div>
 </div>
 
+<?php foreach ($data->result_array() as $i):
+		$ekskul_id = $i['ekskul_id'];
+		$ekskul_judul = $i['ekskul_judul'];
+		$ekskul_deskripsi= $i['ekskul_deskripsi'];
+		$ekskul_photo = $i['ekskul_photo'];
+		?>
+
 <!--Modal Edit Ekskul-->
 <div class="modal fade" id="ModalEdit<?php echo $ekskul_id; ?>" tabindex="-1" role="dialog"
 	 aria-labelledby="myModalLabel">
@@ -208,7 +207,7 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-							aria-hidden="true"><span class="fa fa-close"></span></span></button>
+						aria-hidden="true"><span class="fa fa-close"></span></span></button>
 				<h4 class="modal-title" id="myModalLabel">Edit Ekskul</h4>
 			</div>
 			<form class="form-horizontal" action="<?php echo base_url() . 'admin/ekskul/update_ekskul' ?>"
@@ -220,38 +219,41 @@
 						<div class="col-sm-7">
 							<input type="hidden" name="kode" value="<?php echo $ekskul_id; ?>"/>
 							<input type="text" name="xnama" class="form-control" id="inputUserName"
-								   value="<?php echo $ekskul_judul; ?>" placeholder="Nama Lengkap" required>
+								   value="<?php echo $ekskul_judul; ?>" placeholder="Nama Ekskul" required>
 						</div>
 					</div>
 					<div class="form-group">
-						<label for="inputEmail3" class="col-sm-4 control-label">Deskripsi</label>
+						<label for="inputDeskripsi" class="col-sm-4 control-label">Deskripsi</label>
 						<div class="col-sm-7">
+						<input type="hidden" name="kode" value="<?php echo $ekskul_id; ?>"/>
 							<input type="text" name="xdeskripsi" class="form-control"
-								   value="<?php echo $ekskul_deskripsi; ?>" id="inputDeskripsi"
-								   placeholder="Deskripsi" required>
+								   value="<?php echo $ekskul_deskripsi; ?>" placeholder="Deskripsi" required>
 						</div>
 					</div>
-				</div>
-			</div>
 					<div class="form-group">
-						<label for="inputUserName" class="col-sm-4 control-label">Photo</label>
-						<div class="col-sm-7">
-							<input type="file" name="xphoto" class="form-control" 
-							value="<?php echo $ekskul_photo; ?>" id="inputfile" placeholder="photo" required>
-				</div>
-					</div>
-				</div>
+							<label for="inputUserName" class="col-sm-4 control-label">Photo</label>
+							<div class="col-sm-7">
+								<input type="file" name="filefoto"/>
+							</div>
+						</div>
 			</div>
-			
+		</div>
+		<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary btn-flat" id="simpan">Simpan</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<?php endforeach; ?>
 
-<div class="modal-footer">
-	<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
-	<button type="submit" class="btn btn-primary btn-flat" id="simpan">Update</button>
-</div>
-</form>
-</div>
-</div>
-</div>
+<?php foreach ($data->result_array() as $i):
+		$ekskul_id = $i['ekskul_id'];
+		$ekskul_judul = $i['ekskul_judul'];
+		$ekskul_deskripsi= $i['ekskul_deskripsi'];
+		$ekskul_photo = $i['ekskul_photo'];
+		?>
 
 
 	<!--Modal Hapus Ekskul-->
@@ -265,10 +267,10 @@
 					<h4 class="modal-title" id="myModalLabel">Hapus Ekskul</h4>
 				</div>
 				<form class="form-horizontal"
-					  action="<?php echo base_url() . 'admin/ekskul/hapus_ekskul' . $pengguna_id; ?>" method="post"
+					  action="<?php echo base_url() . 'admin/ekskul/hapus_ekskul/' . $ekskul_id; ?>" method="post"
 					  enctype="multipart/form-data">
 					<div class="modal-body">
-						<input type="hidden" name="kode" value="<?php echo $pengguna_id; ?>"/>
+						<input type="hidden" name="kode" value="<?php echo $ekskul_id; ?>"/>
 						<p>Apakah Anda yakin mau menghapus Ekskul <b><?php echo $ekskul_judul; ?></b> ?</p>
 
 				</div>
@@ -280,6 +282,8 @@
 		</div>
 	</div>
 </div>
+
+<?php endforeach; ?>
 
 <!--Modal Reset Password-->
 

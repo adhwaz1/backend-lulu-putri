@@ -83,65 +83,64 @@
 								<table id="example1" class="table table-striped" style="font-size:12px;">
 									<thead>
 									<tr>
-										<th style="width:70px;">#</th>
-										<th>Agenda</th>
-										<th>Tanggal</th>
+										<th>No</th>
+										<th>Agenda Nama</th>
+										<th>Deskirpsi</th>
+										<th>Mulai</th>
+										<th>Selesai</th>
 										<th>Tempat</th>
 										<th>Waktu</th>
+										<th>Keterangan</th>
+										<th>Tanggal</th>
 										<th>Author</th>
-										<?php
-										if ($this->session->userdata('akses') == '1') {
-											?>
-											<th style="text-align:right;">Aksi</th>
-										<?php } ?>
+							
+										<th style="text-align:right;">Aksi</th>
+
 									</tr>
 									</thead>
 									<tbody>
+									<?php 
+									$No = 1?>
 
-									<tr>
-										<td>22 Oktober 2022</td>
-										<td>Agenda Aja</td>
-										<td>22 Oktober 2022</td>
-										<td>Garut</td>
-										<td>07:00 - 08:00</td>
-										<td>Andri</td>
-										<td style="text-align:right;">
+									<?php foreach ($data->result_array() as $i) :
+											$agenda_id = $i['agenda_id'];
+											$agenda_nama = $i['agenda_nama'];
+											$agenda_deskripsi = $i['agenda_deskripsi'];
+											$agenda_mulai = $i['agenda_mulai'];
+											$agenda_selesai = $i['agenda_selesai'];
+											$agenda_tempat = $i['agenda_tempat'];
+											$agenda_waktu = $i['agenda_waktu'];
+											$agenda_keterangan = $i['agenda_keterangan'];
+											$agenda_author = $i['agenda_author'];
+											$tangal = $i['tanggal'];
+											?>
 
-											<a class="btn" data-toggle="modal"><span class="fa fa-pencil"></span></a>
-											<a class="btn" data-toggle="modal"><span class="fa fa-trash"></span></a>
-
-										</td>
-									</tr>
-
-									<tr>
-										<td>22 Oktober 2022</td>
-										<td>Agenda Aja</td>
-										<td>22 Oktober 2022</td>
-										<td>Garut</td>
-										<td>07:00 - 08:00</td>
-										<td>Andri</td>
-										<td style="text-align:right;">
-
-											<a class="btn" data-toggle="modal"><span class="fa fa-pencil"></span></a>
-											<a class="btn" data-toggle="modal"><span class="fa fa-trash"></span></a>
-
-										</td>
-									</tr>
-
-									<tr>
-										<td>22 Oktober 2022</td>
-										<td>Agenda Aja</td>
-										<td>22 Oktober 2022</td>
-										<td>Garut</td>
-										<td>07:00 - 08:00</td>
-										<td>Andri</td>
-										<td style="text-align:right;">
-
-											<a class="btn" data-toggle="modal"><span class="fa fa-pencil"></span></a>
-											<a class="btn" data-toggle="modal"><span class="fa fa-trash"></span></a>
-
-										</td>
-									</tr>
+										<tr>
+											<td><?php echo $No++; ?></td>
+											<td><?php echo $agenda_nama; ?></td>
+											<td><?php echo $agenda_deskripsi; ?></td>
+											<td><?php echo $agenda_mulai; ?></td>
+											<td><?php echo $agenda_selesai; ?></td>
+											<td><?php echo $agenda_tempat; ?></td>
+											<td><?php echo $agenda_waktu; ?></td>
+											<td><?php echo $agenda_keterangan; ?></td>
+											<td><?php echo $tangal; ?></td>
+											<?php if ($agenda_author == '1'): ?>
+												<td>Administrator</td>
+											<?php else: ?>
+												<td>Author</td>
+											<?php endif; ?>
+							
+											<td style="text-align:right;">
+												<a class="btn" data-toggle="modal"
+												   data-target="#ModalEdit<?php echo $agenda_id; ?>"><span
+															class="fa fa-pencil"></span></a>
+												<a class="btn" data-toggle="modal"
+												   data-target="#ModalHapus<?php echo $agenda_id; ?>"><span
+															class="fa fa-trash"></span></a>
+											</td>
+										</tr>
+									<?php endforeach; ?>
 
 									</tbody>
 								</table>
@@ -170,7 +169,7 @@
 		</ul>
 		<!-- Tab panes -->
 
-	</aside>
+	</aside>-
 	<!-- /.control-sidebar -->
 	<!-- Add the sidebar's background. This div must be placed
 		 immediately after the control sidebar -->
@@ -194,8 +193,8 @@
 					<div class="form-group">
 						<label for="inputUserName" class="col-sm-4 control-label">Nama Agenda</label>
 						<div class="col-sm-7">
-							<input type="text" name="xnama_agenda" class="form-control" id="inputUserName"
-								   placeholder="Nama Agenda" required>
+							<input type="text" name="xnama" class="form-control" id="inputUserName"
+								   placeholder="Nama Agenda" required onkeypress="return isCharKey(event)">
 						</div>
 					</div>
 					<div class="form-group">
@@ -258,6 +257,27 @@
 									  placeholder="Keterangan ..."></textarea>
 						</div>
 					</div>
+					<div class="form-group">
+						<label for="inputUserName" class="col-sm-4 control-label">Tanggal</label>
+						<div class="col-sm-7">
+							<textarea class="form-control" name="xtanggal" rows="2"
+									  placeholder="Tanggal ..."></textarea>
+						</div>
+					</div>
+					<div class="form-group">
+							<label for="inputUserName" class="col-sm-4 control-label">Autor</label>
+							<div class="col-sm-7">
+								<select class="form-control" name="xlevel" required>
+									<?php if ($pengguna_level == '1'): ?>
+										<option value="1" selected>Administrator</option>
+										<option value="2">Kepala Sekolah</option>
+									<?php else: ?>
+										<option value="1">Administrator</option>
+										<option value="2" selected>Author</option>
+									<?php endif; ?>
+								</select>
+							</div>
+						</div>
 
 				</div>
 				<div class="modal-footer">
@@ -300,7 +320,7 @@
 							<label for="inputUserName" class="col-sm-4 control-label">Nama Agenda</label>
 							<div class="col-sm-7">
 								<input type="hidden" name="kode" value="<?php echo $agenda_id; ?>">
-								<input type="text" name="xnama_agenda" class="form-control"
+								<input type="text" name="xnama" class="form-control"
 									   value="<?php echo $agenda_nama; ?>" id="inputUserName" placeholder="Nama Agenda"
 									   required>
 							</div>

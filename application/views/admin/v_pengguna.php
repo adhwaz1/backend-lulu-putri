@@ -95,9 +95,11 @@
 										?>
 
 										<tr>
-											<td><img width="40" height="40" class="img-circle"
-													 src="<?php echo base_url() . 'assets/images/' . $pengguna_photo; ?>">
-											</td>
+										<?php if(empty($pengguna_photo)):?>
+										<td><img width="40" height="40" class="img-circle" src="<?php echo base_url().'assets/images/user_blank.png';?>"></td>
+										<?php else:?>
+										<td><img width="40" height="40" class="img-circle" src="<?php echo base_url().'assets/images/'.$pengguna_photo;?>"></td>
+										<?php endif;?>
 											<td><?php echo $pengguna_nama; ?></td>
 											<td><?php echo $pengguna_email; ?></td>
 											<?php if ($pengguna_jenkel == 'L'): ?>
@@ -331,45 +333,19 @@
 									   placeholder="Ulangi Password">
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="inputUserName" class="col-sm-4 control-label">Kontak Person</label>
-							<div class="col-sm-7">
-								<input type="text" name="xkontak" class="form-control"
-									   value="<?php echo $pengguna_nohp; ?>" id="inputUserName"
-									   placeholder="Kontak Person" required>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+									aria-hidden="true"><span class="fa fa-close"></span></span></button>
+						<h4 class="modal-title" id="myModalLabel">Reset Password</h4>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="inputUserName" class="col-sm-4 control-label">Level</label>
-							<div class="col-sm-7">
-								<select class="form-control" name="xlevel" required>
-									<?php if ($pengguna_level == '1'): ?>
-										<option value="1" selected>Administrator</option>
-										<option value="2">Kepala Sekolah</option>
-									<?php else: ?>
-										<option value="1">Administrator</option>
-										<option value="2" selected>Author</option>
-									<?php endif; ?>
-								</select>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="inputUserName" class="col-sm-4 control-label">Photo</label>
-							<div class="col-sm-7">
-								<input type="file" name="filefoto"/>
-							</div>
-						</div>
-
-
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary btn-flat" id="simpan">Update</button>
-					</div>
-				</form>
-			</div>
+						<div class="modal-footer">
+								<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+								<button type="submit" class="btn btn-primary btn-flat" id="simpan">Simpan</button>
+								</div>
+			</form>
 		</div>
 	</div>
+</div>
 <?php endforeach; ?>
 
 <?php foreach ($data->result_array() as $i) :
@@ -383,6 +359,7 @@
 	$pengguna_level = $i['pengguna_level'];
 	$pengguna_photo = $i['pengguna_photo'];
 	?>
+
 	<!--Modal Hapus Pengguna-->
 	<div class="modal fade" id="ModalHapus<?php echo $pengguna_id; ?>" tabindex="-1" role="dialog"
 		 aria-labelledby="myModalLabel">
@@ -393,57 +370,24 @@
 								aria-hidden="true"><span class="fa fa-close"></span></span></button>
 					<h4 class="modal-title" id="myModalLabel">Hapus Pengguna</h4>
 				</div>
-				<form class="form-horizontal" action="<?php echo base_url() . 'admin/pengguna/hapus_pengguna'; ?>"
-					  method="post" enctype="multipart/form-data">
+				<form class="form-horizontal"
+					  action="<?php echo base_url() . 'admin/pengguna/hapus_pengguna/' . $pengguna_id; ?>" method="post"
+					  enctype="multipart/form-data">
 					<div class="modal-body">
 						<input type="hidden" name="kode" value="<?php echo $pengguna_id; ?>"/>
 						<p>Apakah Anda yakin mau menghapus Pengguna <b><?php echo $pengguna_nama; ?></b> ?</p>
 
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
-						<button type="submit" class="btn btn-primary btn-flat" id="simpan">Hapus</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-<?php endforeach; ?>
-
-<!--Modal Reset Password-->
-<div class="modal fade" id="ModalResetPassword" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-							aria-hidden="true"><span class="fa fa-close"></span></span></button>
-				<h4 class="modal-title" id="myModalLabel">Reset Password</h4>
-			</div>
-
-			<div class="modal-body">
-
-				<table>
-					<tr>
-						<th style="width:120px;">Username</th>
-						<th>:</th>
-						<th><?php echo $this->session->flashdata('uname'); ?></th>
-					</tr>
-					<tr>
-						<th style="width:120px;">Password Baru</th>
-						<th>:</th>
-						<th><?php echo $this->session->flashdata('upass'); ?></th>
-					</tr>
-				</table>
-
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-			</div>
-
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary btn-flat" id="simpan">Hapus</button>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>
 
+<?php endforeach; ?>
 
 <!-- jQuery 2.2.3 -->
 <script src="<?php echo base_url() . 'assets/plugins/jQuery/jquery-2.2.3.min.js' ?>"></script>
@@ -562,6 +506,6 @@
 	</script>
 <?php else: ?>
 
-<?php endif; ?>
+	<?php endif; ?>
 </body>
 </html>

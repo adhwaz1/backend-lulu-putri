@@ -24,7 +24,7 @@ class Ekskul extends CI_Controller
 	function add_ekskul()
 	{
 		$x['kat'] = $this->model_ekskul->get_all_ekskul();
-		$this->load->view('admin/v_add_ekskul;', $x);
+		$this->load->view('admin/v_add_ekskul', $x);
 	}
 
 	function get_edit()
@@ -57,8 +57,8 @@ class Ekskul extends CI_Controller
 				$this->image_lib->resize();
 
 				$photo = $gbr['file_name'];
-				$judul = $this->input->post('ekskul_judul');
-				$deskripsi = $this->input->post('ekskul_deskripsi');
+				$judul = $this->input->post('xnama');
+				$deskripsi = $this->input->post('xdeskripsi');
 				$this->model_ekskul->simpan_ekskul($judul, $deskripsi, $photo);
 
 				echo $this->session->set_flashdata('msg', 'success');
@@ -69,12 +69,12 @@ class Ekskul extends CI_Controller
 			}
 
 		} else {
-			$judul = $this->input->post('ekskul_judul');
-			$deskripsi = $this->input->post('ekskul_deskripsi');
+			$judul = $this->input->post('xnama');
+			$deskripsi = $this->input->post('xdeskripsi');
 
 			$this->model_ekskul->simpan_ekskul_tanpa_img($judul, $deskripsi);
 			echo $this->session->set_flashdata('msg', 'success');
-			redirect('admin/ekskul');
+			redirect('admin/ekskul');    
 		}
 
 
@@ -124,8 +124,8 @@ class Ekskul extends CI_Controller
 
 				$photo = $gbr['file_name'];
 				$kode = $this->input->post('kode');
-				$judul = $this->input->post('ekskul_judul');
-				$deskripsi = $this->input->post('ekskul_deskripsi');
+				$judul = $this->input->post('xnama');
+				$deskripsi = $this->input->post('xdeskripsi');
 
 				$this->model_ekskul->update_ekskul($kode, $judul, $deskripsi, $photo);
 				echo $this->session->set_flashdata('msg', 'info');
@@ -139,8 +139,8 @@ class Ekskul extends CI_Controller
 		} else {
 
 			$kode = $this->input->post('kode');
-			$judul = $this->input->post('ekskul_judul');
-			$deskripsi = $this->input->post('ekskul_deskripsi');
+			$judul = $this->input->post('xnama');
+			$deskripsi = $this->input->post('xdeskripsi');
 
 			$this->model_ekskul->update_ekskul_tanpa_img($kode, $judul, $deskripsi);
 			echo $this->session->set_flashdata('msg', 'info');
@@ -148,31 +148,16 @@ class Ekskul extends CI_Controller
 		}
 	}
 
-	function hapus_ekskul()
+	function hapus_ekskul($kode)
 	{
 		$kode = $this->input->post('kode');
+		$data = $this->model_ekskul->get_all_ekskul($kode);
+		$q = $data->row_array();
+		$p = $q['ekskul_photo'];
+		$path = base_url() . 'assets/images/' . $p;
+		delete_files($path);
 		$this->model_ekskul->hapus_ekskul($kode);
 		echo $this->session->set_flashdata('msg', 'success-hapus');
 		redirect('admin/ekskul');
 	}
-
-	function reset_password()
-	{
-
-		$id = $this->uri->segment(4);
-		$get = $this->model_ekskul->getusername($id);
-		if ($get->num_rows() > 0) {
-			$a = $get->row_array();
-			$b = $a['pengguna_username'];
-		}
-		$pass = rand(123456, 999999);
-		$this->model_ekskul->resetpass($id, $pass);
-		echo $this->session->set_flashdata('msg', 'show-modal');
-		echo $this->session->set_flashdata('uname', $b);
-		echo $this->session->set_flashdata('upass', $pass);
-		redirect('admin/ekskul');
-
-	}
-
-
 }

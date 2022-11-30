@@ -102,8 +102,7 @@
 									<tr>
 
 
-										<td><img width="40" height="40" class="img-circle" src="
-<?php echo base_url() ?>tampilan/gambar/jurusan.png"></td>
+										<td><img width="40" height="40" class="img-circle" src=" <?php echo base_url() ?>tampilan/gambar/jurusan.png"></td>
 
 										<td>Sambutan</td>
 										<td>Nama Pemberi Sambutan</td>

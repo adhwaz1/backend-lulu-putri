@@ -84,74 +84,47 @@
 										<th>Nama</th>
 										<th>Jabatan</th>
 										<th>Jenis Kelamin</th>
-										<?php
-										if ($this->session->userdata('akses') == '1') {
-											?>
-											<th style="text-align:right;">Aksi</th>
-										<?php } ?>
+										
+										<th style="text-align:right;">Aksi</th>
+									
 									</tr>
 									</thead>
 									<tbody>
 
-									<tr>
+									<?php foreach ($data->result_array() as $i):
+										$pegawai_id = $i['pegawai_id'];
+										$pegawai_nip = $i['pegawai_nip'];
+										$pegawai_nama = $i['pegawai_nama'];
+										$pegawai_jabatan= $i['pegawai_jabatan'];
+										$pegawai_jenkel= $i['pegawai_jenkel'];
+										$pegawai_photo = $i['pegawai_photo'];
+										?>
 
-										<td><img width="40" height="40" class="img-circle" src="
-<?php echo base_url() ?>tampilan/gambar/jurusan.png"></td>
+										<tr>
+										<?php if(empty($pegawai_photo)):?>
+										<td><img width="40" height="40" class="img-circle" src="<?php echo base_url().'assets/images/user_blank.png';?>"></td>
+										<?php else:?>
+										<td><img width="40" height="40" class="img-circle" src="<?php echo base_url().'assets/images/'.$pegawai_photo;?>"></td>
+										<?php endif;?>
+											<td><?php echo $pegawai_nip; ?></td>
+											<td><?php echo $pegawai_nama; ?></td>
+											<td><?php echo $pegawai_jabatan; ?></td>
+											<?php if ($pegawai_jenkel == 'L'): ?>
+												<td>Laki-Laki</td>
+											<?php else: ?>
+												<td>Perempuan</td>
+											<?php endif; ?>
 
-										<td>12345</td>
-										<td>Nama Staff</td>
-										<td>Jabatan</td>
-										<td>Perempuan</td>
-
-
-										<td style="text-align:right;">
-
-											<a class="btn" data-toggle="modal"><span class="fa fa-pencil"></span></a>
-											<a class="btn" data-toggle="modal"><span class="fa fa-trash"></span></a>
-
-										</td>
-									</tr>
-
-
-									<tr>
-
-										<td><img width="40" height="40" class="img-circle" src="
-<?php echo base_url() ?>tampilan/gambar/jurusan.png"></td>
-
-										<td>12345</td>
-										<td>Nama Staff</td>
-										<td>Jabatan</td>
-										<td>Perempuan</td>
-
-
-										<td style="text-align:right;">
-
-											<a class="btn" data-toggle="modal"><span class="fa fa-pencil"></span></a>
-											<a class="btn" data-toggle="modal"><span class="fa fa-trash"></span></a>
-
-										</td>
-									</tr>
-
-
-									<tr>
-
-										<td><img width="40" height="40" class="img-circle" src="
-<?php echo base_url() ?>tampilan/gambar/jurusan.png"></td>
-
-										<td>12345</td>
-										<td>Nama Staff</td>
-										<td>Jabatan</td>
-										<td>Perempuan</td>
-
-
-										<td style="text-align:right;">
-
-											<a class="btn" data-toggle="modal"><span class="fa fa-pencil"></span></a>
-											<a class="btn" data-toggle="modal"><span class="fa fa-trash"></span></a>
-
-										</td>
-									</tr>
-
+											<td style="text-align:right;">
+												<a class="btn" data-toggle="modal"
+												   data-target="#ModalEdit<?php echo $pegawai_id; ?>"><span
+															class="fa fa-pencil"></span></a>
+												<a class="btn" data-toggle="modal"
+												   data-target="#ModalHapus<?php echo $pegawai_id; ?>"><span
+															class="fa fa-trash"></span></a>
+											</td>
+										</tr>
+									<?php endforeach; ?>
 									</tbody>
 								</table>
 							</div>
@@ -171,19 +144,6 @@
 		<strong>Copyright <?php echo date('Y'); ?> by SMKN 1 Garut</strong>
 	</footer>
 
-	<!-- Control Sidebar -->
-	<aside class="control-sidebar control-sidebar-dark">
-		<!-- Create the tabs -->
-		<ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-			<li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-			<li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-		</ul>
-		<!-- Tab panes -->
-
-	</aside>
-	<!-- /.control-sidebar -->
-	<!-- Add the sidebar's background. This div must be placed
-		 immediately after the control sidebar -->
 	<div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
@@ -204,8 +164,7 @@
 					<div class="form-group">
 						<label for="inputUserName" class="col-sm-4 control-label">NIP</label>
 						<div class="col-sm-7">
-							<input type="text" name="xnip" class="form-control" id="inputUserName" placeholder="NIP"
-								   required onkeypress="return isNumberKey(event)">
+							<input type="text" name="xnip" class="form-control" id="inputUserName" placeholder="NIP" required>
 						</div>
 					</div>
 
@@ -214,6 +173,14 @@
 						<div class="col-sm-7">
 							<input type="text" name="xnama" class="form-control" id="inputUserName" placeholder="Nama"
 								   required onkeypress="return isCharKey(event)">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="inputUserName" class="col-sm-4 control-label">Jabatan</label>
+						<div class="col-sm-7">
+							<input type="text" name="xjabatan" class="form-control" id="inputUserName"
+								   placeholder="Jabatan" required>
 						</div>
 					</div>
 
@@ -229,25 +196,13 @@
 								<label for="inlineRadio2"> Perempuan </label>
 							</div>
 						</div>
-					</div>
 
 					<div class="form-group">
-						<label for="inputUserName" class="col-sm-4 control-label">Jabatan</label>
-						<div class="col-sm-7">
-							<input type="text" name="xjabatan" class="form-control" id="inputUserName"
-								   placeholder="Jabatan" required>
-						</div>
-					</div>
-
-
-					<div class="form-group">
-						<label for="inputUserName" class="col-sm-4 control-label">Photo</label>
+						<label for="inputfile" class="col-sm-4 control-label">Photo</label>
 						<div class="col-sm-7">
 							<input type="file" name="filefoto"/>
 						</div>
 					</div>
-
-
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
@@ -258,7 +213,134 @@
 	</div>
 </div>
 
-<!--Modal Edit Album-->
+<?php foreach ($data->result_array() as $i):
+	$pegawai_id = $i['pegawai_id'];
+	$pegawai_nip = $i['pegawai_nip'];
+	$pegawai_nama = $i['pegawai_nama'];
+	$pegawai_jabatan= $i['pegawai_jabatan'];
+	$pegawai_jenkel= $i['pegawai_jenkel'];
+	$pegawai_photo = $i['pegawai_photo'];
+?>
+
+<!--Modal Edit Pegawai-->
+<div class="modal fade" id="ModalEdit<?php echo $pegawai_id; ?>" tabindex="-1" role="dialog"
+	 aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true"><span class="fa fa-close"></span></span></button>
+				<h4 class="modal-title" id="myModalLabel">Edit Pegawai</h4>
+			</div>
+			<form class="form-horizontal" action="<?php echo base_url() . 'admin/pegawai/update_pegawai' ?>"
+				  method="post" enctype="multipart/form-data">
+				<div class="modal-body">
+                    
+				<div class="form-group">
+							<label for="inputUserName" class="col-sm-4 control-label">Nip</label>
+							<div class="col-sm-7">
+								<input type="hidden" name="kode" value="<?php echo $pegawai_id; ?>"/>
+								<input type="text" name="xnip"class="form-control" id="inputUserName"  
+									value="<?php echo $pegawai_nip; ?>" placeholder="Nip" required>
+							</div>
+						</div>
+
+				<div class="form-group">
+							<label for="inputUserName" class="col-sm-4 control-label">Nama Pegawai</label>
+							<div class="col-sm-7">
+								<input type="hidden" name="kode" value="<?php echo $pegawai_id; ?>"/>
+								<input type="text" name="xnama" class="form-control" id="inputUserName" 
+									value="<?php echo $pegawai_nama; ?>" placeholder="Nama Lengkap">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputjabatan" class="col-sm-4 control-label">Jabatan</label>
+							<div class="col-sm-7">
+								<input type="hidden" name="kode" value="<?php echo $pegawai_id; ?>"/>
+								<input type="text" name="xjabatan" class="form-control" id="inputUserName"
+									value="<?php echo $pegawai_jabatan; ?>" placeholder="Jabatan" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputUserName" class="col-sm-4 control-label">Jenis Kelamin</label>
+							<div class="col-sm-7">
+								<?php if ($pegawai_jenkel == 'L'): ?>
+									<div class="radio radio-info radio-inline">
+										<input type="radio" id="inlineRadio1" value="L" name="xjenkel" checked>
+										<label for="inlineRadio1"> Laki-Laki </label>
+									</div>
+									<div class="radio radio-info radio-inline">
+										<input type="radio" id="inlineRadio1" value="P" name="xjenkel">
+										<label for="inlineRadio2"> Perempuan </label>
+									</div>
+								<?php else: ?>
+									<div class="radio radio-info radio-inline">
+										<input type="radio" id="inlineRadio1" value="L" name="xjenkel">
+										<label for="inlineRadio1"> Laki-Laki </label>
+									</div>
+									<div class="radio radio-info radio-inline">
+										<input type="radio" id="inlineRadio1" value="P" name="xjenkel" checked>
+										<label for="inlineRadio2"> Perempuan </label>
+									</div>
+								<?php endif; ?>
+							</div>
+						</div>
+						<div class="form-group">
+						<label for="inputfile" class="col-sm-4 control-label">Photo</label>
+						<div class="col-sm-7">
+							<input type="file" name="xphoto" class="form-control" id="inputfile"
+							value="<?php echo $pegawai_photo; ?>" placeholder="Photo" required>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary btn-flat" id="simpan">Simpan</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<?php endforeach; ?>
+
+<?php foreach ($data->result_array() as $i):
+	$pegawai_id = $i['pegawai_id'];
+	$pegawai_nip = $i['pegawai_nip'];
+	$pegawai_nama = $i['pegawai_nama'];
+	$pegawai_jabatan= $i['pegawai_jabatan'];
+	$pegawai_jenkel= $i['pegawai_jenkel'];
+	$pegawai_photo = $i['pegawai_photo'];
+?>
+
+	<!--Modal Hapus Pegawai-->
+	<div class="modal fade" id="ModalHapus<?php echo $pegawai_id; ?>" tabindex="-1" role="dialog"
+		 aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+								aria-hidden="true"><span class="fa fa-close"></span></span></button>
+					<h4 class="modal-title" id="myModalLabel">Hapus Pegawai</h4>
+				</div>
+				<form class="form-horizontal"
+					  action="<?php echo base_url() . 'admin/pegawai/hapus_pegawai/' . $pegawai_id; ?>" method="post"
+					  enctype="multipart/form-data">
+					<div class="modal-body">
+						<input type="hidden" name="kode" value="<?php echo $pegawai_id; ?>"/>
+						<p>Apakah Anda yakin mau menghapus Pegawai <b><?php echo $pegawai_nama; ?></b> ?</p>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary btn-flat" id="simpan">Hapus</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<?php endforeach; ?>
 
 
 <!-- jQuery 2.2.3 -->

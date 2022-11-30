@@ -39,7 +39,7 @@ class Pengguna extends CI_Controller
 		$this->load->view('admin/v_edit_pengguna', $x);
 	}
  
-	function simpan_pengguna($gambar)
+	function simpan_pengguna()
 	{
 		$config['upload_path'] = './assets/images/'; //path folder
 		$config['allowed_types'] = 'gif|jpg|png|jpeg|bmp'; //type yang dapat diakses bisa anda sesuaikan
@@ -219,7 +219,7 @@ class Pengguna extends CI_Controller
 
 	function hapus_pengguna()
 	{
-
+		
 		$kode = $this->input->post('kode');
 		$data = $this->model_pengguna->get_pengguna_login($kode);
 		$q = $data->row_array();

@@ -70,11 +70,14 @@
 					<div class="box">
 
 						<div class="box">
+						<?php
+						if ($this->session->userdata('akses') == '1') { ?>
 
 							<div class="box-header">
 								<a class="btn btn-success btn-flat" data-toggle="modal" data-target="#myModal"><span
 											class="fa fa-plus"></span> Add Kompetensi Keahlian</a>
 							</div>
+							<?php } ?>
 
 							<!-- /.box-header -->
 							<div class="box-body">
@@ -86,34 +89,45 @@
 										<th>Nama Kompetensi Keahlian</th>
 										<th>Deskripsi</th>
 										<th>Author</th>
-										<?php
-										if ($this->session->userdata('akses') == '1') {
-											?>
-											<th style="text-align:right;">Aksi</th>
-										<?php } ?>
+
+										<th style="text-align:right;">Aksi</th>
+
 									</tr>
 									</thead>
 									<tbody>
 
-									<tr>
-										<td><?php echo $no; ?></td>
-										<?php if (empty($photo)): ?>
-										<td><img width="40" height="40" class="img-circle" src="
-<?php echo base_url() ?>tampilan/gambar/jurusan.png"></td>
+									<?php 
+									$No = 1?>
+									<?php foreach ($data->result_array() as $i):
+										$jurusan_id = $i['jurusan_id'];
+										$jurusan_judul = $i['jurusan_judul'];
+										$jurusan_deskripsi= $i['jurusan_deskripsi'];
+										$jurusan_author= $i['jurusan_author'];
+										$jurusan_photo = $i['jurusan_photo'];
+										?>
 
-										<td><?php echo $judul; ?></td>
-										<td><?php echo $deskripsi; ?></td>
-										<td><?php echo $author; ?></td>
-										<td style="text-align:right;">
-
-											<a class="btn" data-toggle="modal"><span class="fa fa-pencil"></span></a>
-											<a class="btn" data-toggle="modal"><span class="fa fa-trash"></span></a>
-
-
-										</td>
-									</tr>
-
-									</tbody>
+										<tr>
+											<td><?php echo $No++; ?></td>
+											<?php if(empty($jurusan_photo)):?>
+											<td><img width="40" height="40" class="img-circle" src="<?php echo base_url().'assets/images/user_blank.png';?>"></td>
+											<?php else:?>
+											<td><img width="40" height="40" class="img-circle" src="<?php echo base_url().'assets/images/'.$jurusan_photo;?>"></td>
+											<?php endif;?>
+											<td><?php echo $jurusan_judul; ?></td>
+											<td><?php echo $jurusan_deskripsi; ?></td>
+											<td><?php echo $jurusan_author; ?></td>
+							
+											<td style="text-align:right;">
+												<a class="btn" data-toggle="modal"
+												   data-target="#ModalEdit<?php echo $jurusan_id; ?>"><span
+															class="fa fa-pencil"></span></a>
+												<a class="btn" data-toggle="modal"
+												   data-target="#ModalHapus<?php echo $jurusan_id; ?>"><span
+															class="fa fa-trash"></span></a>
+											</td>
+										</tr>
+									<?php endforeach; ?>
+								 </tbody>
 								</table>
 							</div>
 							<!-- /.box-body -->
@@ -132,61 +146,59 @@
 		<strong>Copyright <?php echo date('Y'); ?> by SMKN 1 Garut</strong>
 	</footer>
 
-	<!-- Control Sidebar -->
-	<aside class="control-sidebar control-sidebar-dark">
-		<!-- Create the tabs -->
-		<ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-			<li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-			<li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-		</ul>
-		<!-- Tab panes -->
-
-	</aside>
-	<!-- /.control-sidebar -->
-	<!-- Add the sidebar's background. This div must be placed
-		 immediately after the control sidebar -->
 	<div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
 
-<!--Modal Add Pengguna-->
+<!--Modal Add Jurusan-->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
-			<?php
-			if ($this->session->userdata('akses') == '1') {
-				?>
+			
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
 								aria-hidden="true"><span class="fa fa-close"></span></span></button>
 					<h4 class="modal-title" id="myModalLabel">Add Kompetensi Keahlian</h4>
 				</div>
-			<?php } ?>
+				
 			<form class="form-horizontal" action="<?php echo base_url() . 'admin/jurusan/simpan_jurusan' ?>"
 				  method="post" enctype="multipart/form-data">
 				<div class="modal-body">
 
-					<div class="form-group">
+				<div class="form-group">
 						<label for="inputUserName" class="col-sm-4 control-label">Nama Kompetensi Keahlian</label>
 						<div class="col-sm-7">
-							<input type="text" name="xjudul" class="form-control" id="inputUserName"
-								   placeholder="Kompetensi Keahlian" required>
+							<input type="text" name="xnama" class="form-control" id="inputUserName"
+								   placeholder="Nama Ekskul" required onkeypress="return isCharKey(event)">
 						</div>
 					</div>
 					<div class="form-group">
 						<label for="inputUserName" class="col-sm-4 control-label">Deskripsi</label>
 						<div class="col-sm-7">
-							<textarea class="form-control" rows="3" style="width: 300px; height:300px;"
-									  name="xdeskripsi" placeholder="Deskripsi ..." required></textarea>
+							<textarea class="form-control" rows="3" name="xdeskripsi" placeholder="Deskripsi ..."
+									  required></textarea>
 						</div>
 					</div>
+					<<div class="form-group">
+							<label for="inputUserName" class="col-sm-4 control-label">Autor</label>
+							<div class="col-sm-7">
+								<select class="form-control" name="xlevel" required>
+									<?php if ($pengguna_level == '1'): ?>
+										<option value="1" selected>Administrator</option>
+										<option value="2">Kepala Sekolah</option>
+									<?php else: ?>
+										<option value="1">Administrator</option>
+										<option value="2" selected>Author</option>
+									<?php endif; ?>
+								</select>
+							</div>
+						</div>
 					<div class="form-group">
 						<label for="inputUserName" class="col-sm-4 control-label">Photo</label>
 						<div class="col-sm-7">
-							<input type="file" name="filefoto"/>
+							<input type="file" name="filefoto" required/>
 						</div>
 					</div>
-
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
@@ -197,9 +209,110 @@
 	</div>
 </div>
 
+<?php foreach ($data->result_array() as $i):
+	$jurusan_id = $i['jurusan_id'];
+	$jurusan_judul = $i['jurusan_judul'];
+	$jurusan_deskripsi= $i['jurusan_deskripsi'];
+	$jurusan_author= $i['jurusan_author'];
+	$jurusan_photo = $i['jurusan_photo'];
+?>
 
-<!--Modal Edit Pengguna-->
 
+<!--Modal Edit Jurusan-->
+<div class="modal fade" id="ModalEdit<?php echo $jurusan_id; ?>" tabindex="-1" role="dialog"
+	 aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true"><span class="fa fa-close"></span></span></button>
+				<h4 class="modal-title" id="myModalLabel">Edit Jurusan</h4>
+			</div>
+			<form class="form-horizontal" action="<?php echo base_url() . 'admin/jurusan/update_jurusan' ?>"
+				  method="post" enctype="multipart/form-data">
+				<div class="modal-body">
+
+					<div class="form-group">
+							<label for="inputUserName" class="col-sm-4 control-label">Nama Kompetensi Keahlian</label>
+							<div class="col-sm-7">
+								<input type="hidden" name="kode" value="<?php echo $jurusan_id; ?>"/>
+								<input type="text" name="xnama" class="form-control" 
+									   value="<?php echo $jurusan_judul; ?>" id="inputUserName" placeholder="Nama Lengkap" required >
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="inputUserName" class="col-sm-4 control-label">Deskripsi</label>
+							<div class="col-sm-7">
+								<textarea class="form-control" rows="3" name="xdeskripsi" placeholder="Deskripsi ..."
+										  required><?php echo $jurusan_deskripsi; ?></textarea>
+							</div>
+						</div>
+
+					<div class="form-group">
+						<label for="inputUserName" class="col-sm-4 control-label">Author</label>
+						<div class="col-sm-7">
+							<input type="hidden" name="kode" value="<?php echo $jurusan_id; ?>"/>
+							<input type="text" name="xauthor" class="form-control" id="inputUserName"
+									value="<?php echo $jurusan_author; ?>" placeholder="Author" required>
+						</div>
+					</div>	
+
+					<div class="form-group">
+						<label for="inputUserName" class="col-sm-4 control-label">Photo</label>
+						<div class="col-sm-7">
+							<input type="file" name="xphoto" class="form-control" 
+							value="<?php echo $jurusan_photo; ?>" id="inputfile" placeholder="photo" required>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary btn-flat" id="simpan">Simpan</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<?php endforeach; ?>
+
+<?php foreach ($data->result_array() as $i):
+	$jurusan_id = $i['jurusan_id'];
+	$jurusan_judul = $i['jurusan_judul'];
+	$jurusan_deskripsi= $i['jurusan_deskripsi'];
+	$jurusan_author= $i['jurusan_author'];
+	$jurusan_photo = $i['jurusan_photo'];
+?>
+
+<!--Modal Hapus Jurusan-->
+<div class="modal fade" id="ModalHapus<?php echo $jurusan_id; ?>" tabindex="-1" role="dialog"
+		 aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+								aria-hidden="true"><span class="fa fa-close"></span></span></button>
+					<h4 class="modal-title" id="myModalLabel">Hapus Jurusan</h4>
+				</div>
+				<form class="form-horizontal"
+					  action="<?php echo base_url() . 'admin/jurusan/hapus_jurusan/' . $jurusan_id; ?>" method="post"
+					  enctype="multipart/form-data">
+					<div class="modal-body">
+						<input type="hidden" name="kode" value="<?php echo $jurusan_id; ?>"/>
+						<p>Apakah Anda yakin mau menghapus Jurusan <b><?php echo $jurusan_judul; ?></b> ?</p>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary btn-flat" id="simpan">Hapus</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<?php endforeach; ?>
 
 <!-- jQuery 2.2.3 -->
 <script src="<?php echo base_url() . 'assets/plugins/jQuery/jquery-2.2.3.min.js' ?>"></script>
@@ -232,6 +345,7 @@
 			"info": true,
 			"autoWidth": false
 		});
+		
 
 		$('#datepicker').datepicker({
 			autoclose: true,

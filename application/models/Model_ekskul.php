@@ -5,7 +5,7 @@ class Model_ekskul extends CI_Model
 
 	function get_all_ekskul()
 	{
-		$hsl = $this->db->query("SELECT ekskul.* FROM ekskul");
+		$hsl = $this->db->query("SELECT* FROM ekskul");
 		return $hsl;
 	}
 
@@ -29,9 +29,11 @@ class Model_ekskul extends CI_Model
 	function simpan_ekskul_tanpa_img($judul, $deskripsi)
 	{
 
-		$hsl = $this->db->query("INSERT INTO ekskul(ekskul_judul,ekskul_deskripsi,ekskul_author) VALUES ('$judul','$deskripsi')");
+		$hsl = $this->db->query("INSERT INTO ekskul(ekskul_judul,ekskul_deskripsi) VALUES ('$judul','$deskripsi')");
 		return $hsl;
 	}
+
+	//UPDATE PENGGUNA //
 
 	function update_ekskul($kode, $judul, $deskripsi, $photo)
 	{
@@ -47,9 +49,17 @@ class Model_ekskul extends CI_Model
 		return $hsl;
 	}
 
+	//END UPDATE PENGGUNA//
+
 	function hapus_ekskul($kode)
 	{
 		$hsl = $this->db->query("DELETE FROM ekskul WHERE ekskul_id='$kode'");
+		return $hsl;
+	}
+
+	function getusername($id)
+	{
+		$hsl = $this->db->query("SELECT * FROM ekskul where ekskul_id='$id'");
 		return $hsl;
 	}
 

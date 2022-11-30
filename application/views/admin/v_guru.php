@@ -74,10 +74,8 @@
 									<a class="btn btn-success btn-flat" data-toggle="modal" data-target="#myModal"><span
 												class="fa fa-plus"></span> Add Guru</a>
 								</div>
+								<?php } ?>
 
-								<?php
-							}
-							?>
 							<!-- /.box-header -->
 							<div class="box-body">
 								<table id="example1" class="table table-striped" style="font-size:13px;">
@@ -86,40 +84,57 @@
 										<th>Photo</th>
 										<th>NIP</th>
 										<th>Nama</th>
-										<th>Tempat/Tgl Lahir</th>
 										<th>Jenis Kelamin</th>
+										<th>Tempat Lahir</th>
+										<th>Tanggal Lahir</th>
+										<th>Pendidikan Guru</th>
 										<th>Mata Pelajaran</th>
-										<?php
-										if ($this->session->userdata('akses') == '1') {
-											?>
-											<th style="text-align:right;">Aksi</th>
-										<?php } ?>
+										
+										<th style="text-align:right;">Aksi</th>
 									</tr>
 									</thead>
-									<tbody>
+								<tbody>
 
-									<tr>
+									<?php foreach ($data->result_array() as $i):
+										$guru_id = $i['guru_id'];
+										$guru_nip = $i['guru_nip'];
+										$guru_nama= $i['guru_nama'];
+										$guru_jenkel= $i['guru_jenkel'];
+										$guru_tmpt_lahir= $i['guru_tmp_lahir'];
+										$guru_tgl_lahir= $i['guru_tgl_lahir'];
+										$pendidikan_guru= $i['pendidikan_guru'];
+										$guru_mapel= $i['guru_mapel'];
+										$guru_photo = $i['guru_photo'];
+										?>
 
-										<td><img width="40" height="40" class="img-circle" src="
-<?php echo base_url() ?>tampilan/gambar/jurusan.png"></td>
-
-										<td>12345</td>
-										<td>Nama Guru</td>
-										<td>Garut 22 oktober 2022</td>
-
-										<td>Laki-Laki</td>
-
-
-										<td>LKA</td>
-
-										<td style="text-align:right;">
-
-											<a class="btn" data-toggle="modal"><span class="fa fa-pencil"></span></a>
-											<a class="btn" data-toggle="modal"><span class="fa fa-trash"></span></a>
-
-										</td>
-									</tr>
-
+										<tr>
+										<?php if(empty($guru_photo)):?>
+										<td><img width="40" height="40" class="img-circle" src="<?php echo base_url().'assets/images/user_blank.png';?>"></td>
+										<?php else:?>
+										<td><img width="40" height="40" class="img-circle" src="<?php echo base_url().'assets/images/'.$guru_photo;?>"></td>
+										<?php endif;?>
+											<td><?php echo $guru_nip; ?></td>
+											<td><?php echo $guru_nama; ?></td>
+											<?php if ($guru_jenkel == 'L'): ?>
+												<td>Laki-Laki</td>
+											<?php else: ?>
+												<td>Perempuan</td>
+											<?php endif; ?>
+											<td><?php echo $guru_tmpt_lahir; ?></td>
+											<td><?php echo $guru_tgl_lahir; ?></td>
+											<td><?php echo $pendidikan_guru; ?></td>
+											<td><?php echo $guru_mapel; ?></td>
+							
+											<td style="text-align:right;">
+												<a class="btn" data-toggle="modal"
+												   data-target="#ModalEdit<?php echo $guru_id; ?>"><span
+															class="fa fa-pencil"></span></a>
+												<a class="btn" data-toggle="modal"
+												   data-target="#ModalHapus<?php echo $guru_id; ?>"><span
+															class="fa fa-trash"></span></a>
+											</td>
+										</tr>
+									<?php endforeach; ?>
 									</tbody>
 								</table>
 							</div>
@@ -139,19 +154,6 @@
 		<strong>Copyright <?php echo date('Y'); ?> by SMKN 1 Garut</strong>
 	</footer>
 
-	<!-- Control Sidebar -->
-	<aside class="control-sidebar control-sidebar-dark">
-		<!-- Create the tabs -->
-		<ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-			<li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
-			<li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
-		</ul>
-		<!-- Tab panes -->
-
-	</aside>
-	<!-- /.control-sidebar -->
-	<!-- Add the sidebar's background. This div must be placed
-		 immediately after the control sidebar -->
 	<div class="control-sidebar-bg"></div>
 </div>
 <!-- ./wrapper -->
@@ -218,7 +220,7 @@
 					<div class="form-group">
 						<label for="inputUserName" class="col-sm-4 control-label">Pendidikan Guru</label>
 						<div class="col-sm-7">
-							<input type="text" name="xpendguru" class="form-control" id="inputUserName"
+							<input type="text" name="xpendidikan_guru" class="form-control" id="inputUserName"
 								   placeholder="Contoh: S1 Teknik Informatika" required>
 						</div>
 					</div>
@@ -234,9 +236,10 @@
 					<div class="form-group">
 						<label for="inputUserName" class="col-sm-4 control-label">Photo</label>
 						<div class="col-sm-7">
-							<input type="file" name="filefoto"/>
+							<input type="file" name="filefoto" required/>
 						</div>
 					</div>
+				</div>
 
 
 				</div>
@@ -249,7 +252,164 @@
 	</div>
 </div>
 
+<?php foreach ($data->result_array() as $i):
+		$guru_id = $i['guru_id'];
+		$guru_nip = $i['guru_nip'];
+		$guru_nama= $i['guru_nama'];
+		$guru_jenkel= $i['guru_jenkel'];
+		$guru_tmpt_lahir= $i['guru_tmp_lahir'];
+		$guru_tgl_lahir= $i['guru_tgl_lahir'];
+		$pendidikan_guru= $i['pendidikan_guru'];
+		$guru_mapel= $i['guru_mapel'];
+		$guru_photo = $i['guru_photo'];
+		?>
+
 <!--Modal Edit Album-->
+<div class="modal fade" id="ModalEdit<?php echo $guru_id; ?>" tabindex="-1" role="dialog"
+	 aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true"><span class="fa fa-close"></span></span></button>
+				<h4 class="modal-title" id="myModalLabel">Edit Guru</h4>
+			</div>
+			<form class="form-horizontal" action="<?php echo base_url() . 'admin/guru/update_guru' ?>"
+				  method="post" enctype="multipart/form-data">
+				<div class="modal-body">
+
+				<div class="form-group">
+							<label for="inputUserName" class="col-sm-4 control-label">Nip</label>
+							<div class="col-sm-7">
+								<input type="hidden" name="kode" value="<?php echo $guru_id; ?>"/>
+								<input type="text" name="xnip" class="form-control" id="inputUserName"
+									   value="<?php echo $guru_nip; ?>" placeholder="Nip" required>
+							</div>
+						</div>
+
+				<div class="form-group">
+							<label for="inputUserName" class="col-sm-4 control-label">Nama</label>
+							<div class="col-sm-7">
+								<input type="hidden" name="kode" value="<?php echo $guru_id; ?>"/>
+								<input type="text" name="xnama" class="form-control" id="inputUserName"
+									   value="<?php echo $guru_nama; ?>" placeholder="Nama Lengkap" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputJenkel" class="col-sm-4 control-label">Jenis Kelamin</label>
+							<div class="col-sm-7">
+								<?php if ($guru_jenkel == 'L'): ?>
+									<div class="radio radio-info radio-inline">
+										<input type="radio" id="inlineRadio1" value="L" name="xjenkel" checked>
+										<label for="inlineRadio1"> Laki-Laki </label>
+									</div>
+									<div class="radio radio-info radio-inline">
+										<input type="radio" id="inlineRadio1" value="P" name="xjenkel">
+										<label for="inlineRadio2"> Perempuan </label>
+									</div>
+								<?php else: ?>
+									<div class="radio radio-info radio-inline">
+										<input type="radio" id="inlineRadio1" value="L" name="xjenkel">
+										<label for="inlineRadio1"> Laki-Laki </label>
+									</div>
+									<div class="radio radio-info radio-inline">
+										<input type="radio" id="inlineRadio1" value="P" name="xjenkel" checked>
+										<label for="inlineRadio2"> Perempuan </label>
+									</div>
+								<?php endif; ?>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputTmpLahir" class="col-sm-4 control-label">Tempat Lahir</label>
+							<div class="col-sm-7">
+								<input type="text" name="xtmplahir" class="form-control"
+									   value="<?php echo $guru_tmpt_lahir; ?>" id="inputTmpLahir"
+									   placeholder="TmpLahir" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inpuTglLahir" class="col-sm-4 control-label">Tanggal Lahir</label>
+							<div class="col-sm-7">
+								<input type="text" name="xtgllahir" class="form-control"
+									   value="<?php echo $guru_tgl_lahir; ?>" id="inputTglLahir"
+									   placeholder="TglLahir" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputpendidikan_guru" class="col-sm-4 control-label">Pendidikan Guru</label>
+							<div class="col-sm-7">
+								<input type="text" name="xpendidikan_guru" class="form-control"
+									   value="<?php echo $pendidikan_guru; ?>" id="inputpendidikan_guru"
+									   placeholder="pendidikan_guru" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="inputMapel" class="col-sm-4 control-label">Mata Pelajaran</label>
+							<div class="col-sm-7">
+								<input type="text" name="xmapel" class="form-control"
+									   value="<?php echo $guru_mapel; ?>" id="inputMapel"
+									   placeholder="Mapel" required>
+							</div>
+						</div>
+						<div class="form-group">
+						<label for="inputUserName" class="col-sm-4 control-label">Photo</label>
+						<div class="col-sm-7">
+							<input type="file" name="xphoto" class="form-control" 
+							value="<?php echo $guru_photo; ?>" id="inputfile" placeholder="photo" required>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary btn-flat" id="simpan">Simpan</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<?php endforeach; ?>
+
+<?php foreach ($data->result_array() as $i):
+		$guru_id = $i['guru_id'];
+		$guru_nip = $i['guru_nip'];
+		$guru_nama= $i['guru_nama'];
+		$guru_jenkel= $i['guru_jenkel'];
+		$guru_tmpt_lahir= $i['guru_tmp_lahir'];
+		$guru_tgl_lahir= $i['guru_tgl_lahir'];
+		$pendidikan_guru= $i['pendidikan_guru'];
+		$guru_mapel= $i['guru_mapel'];
+		$guru_photo = $i['guru_photo'];
+		?>
+
+	<!--Modal Hapus Guru-->
+	<div class="modal fade" id="ModalHapus<?php echo $guru_id; ?>" tabindex="-1" role="dialog"
+		 aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+								aria-hidden="true"><span class="fa fa-close"></span></span></button>
+					<h4 class="modal-title" id="myModalLabel">Hapus Guru</h4>
+				</div>
+				<form class="form-horizontal"
+					  action="<?php echo base_url() . 'admin/guru/hapus_guru/' . $guru_id; ?>" method="post"
+					  enctype="multipart/form-data">
+					<div class="modal-body">
+						<input type="hidden" name="kode" value="<?php echo $guru_id; ?>"/>
+						<p>Apakah Anda yakin mau menghapus Guru <b><?php echo $guru_nama; ?></b> ?</p>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-flat" data-dismiss="modal">Close</button>
+					<button type="submit" class="btn btn-primary btn-flat" id="simpan">Hapus</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<?php endforeach; ?>
 
 
 <!-- jQuery 2.2.3 -->

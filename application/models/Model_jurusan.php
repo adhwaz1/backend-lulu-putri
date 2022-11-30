@@ -5,7 +5,7 @@ class Model_jurusan extends CI_Model
 
 	function get_all_jurusan()
 	{
-		$hsl = $this->db->query("SELECT jurusan.* FROM jurusan");
+		$hsl = $this->db->query("SELECT * FROM jurusan");
 		return $hsl;
 	}
 

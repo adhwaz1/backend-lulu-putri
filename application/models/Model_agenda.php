@@ -25,7 +25,7 @@ class Model_agenda extends CI_Model
 
 	function get_all_agenda()
 	{
-		$hsl = $this->db->query("SELECT agenda.*,DATE_FORMAT(agenda_tanggal,'%d/%m/%Y') AS tanggal FROM agenda ORDER BY agenda_id DESC");
+		$hsl = $this->db->query("SELECT agenda.*,DATE_FORMAT(agenda_tanggal,'%d/%m/%Y') AS tanggal FROM agenda ORDER BY agenda_id asc");
 		return $hsl;
 	}
 
