@@ -66,14 +66,11 @@
 					<div class="box">
 
 						<div class="box">
-							<?php
-							if ($this->session->userdata('akses') == '1') {
-								?>
 								<div class="box-header">
 									<a class="btn btn-success btn-flat" data-toggle="modal" data-target="#myModal"><span
 												class="fa fa-plus"></span> Add Staf Kependidikan</a>
 								</div>
-							<?php } ?>
+							
 							<!-- /.box-header -->
 							<div class="box-body">
 								<table id="example1" class="table table-striped" style="font-size:13px;">
@@ -160,6 +157,8 @@
 			<form class="form-horizontal" action="<?php echo base_url() . 'admin/pegawai/simpan_pegawai' ?>"
 				  method="post" enctype="multipart/form-data">
 				<div class="modal-body">
+					<input type="hidden" name="kode" value="<?php echo $id;?>"/>
+                        <input type="hidden" value="<?php echo $photo;?>" name="gambar">`
 
 					<div class="form-group">
 						<label for="inputUserName" class="col-sm-4 control-label">NIP</label>

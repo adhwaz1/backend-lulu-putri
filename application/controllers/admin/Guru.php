@@ -71,7 +71,12 @@ class Guru extends CI_Controller
 				redirect('admin/guru');
 			}
 
-		} else {
+		} 
+		
+		
+		
+		
+		else {
 				$nip = $this->input->post('xnip');
 				$nama = $this->input->post('xnama');
 				$jenkel = $this->input->post('xjenkel');

@@ -91,7 +91,6 @@
 										<th>Tempat</th>
 										<th>Waktu</th>
 										<th>Keterangan</th>
-										<th>Tanggal</th>
 										<th>Author</th>
 							
 										<th style="text-align:right;">Aksi</th>
@@ -112,7 +111,6 @@
 											$agenda_waktu = $i['agenda_waktu'];
 											$agenda_keterangan = $i['agenda_keterangan'];
 											$agenda_author = $i['agenda_author'];
-											$tangal = $i['tanggal'];
 											?>
 
 										<tr>
@@ -124,7 +122,6 @@
 											<td><?php echo $agenda_tempat; ?></td>
 											<td><?php echo $agenda_waktu; ?></td>
 											<td><?php echo $agenda_keterangan; ?></td>
-											<td><?php echo $tangal; ?></td>
 											<?php if ($agenda_author == '1'): ?>
 												<td>Administrator</td>
 											<?php else: ?>
@@ -257,13 +254,7 @@
 									  placeholder="Keterangan ..."></textarea>
 						</div>
 					</div>
-					<div class="form-group">
-						<label for="inputUserName" class="col-sm-4 control-label">Tanggal</label>
-						<div class="col-sm-7">
-							<textarea class="form-control" name="xtanggal" rows="2"
-									  placeholder="Tanggal ..."></textarea>
-						</div>
-					</div>
+
 					<div class="form-group">
 							<label for="inputUserName" class="col-sm-4 control-label">Autor</label>
 							<div class="col-sm-7">
@@ -300,7 +291,6 @@
 	$agenda_waktu = $i['agenda_waktu'];
 	$agenda_keterangan = $i['agenda_keterangan'];
 	$agenda_author = $i['agenda_author'];
-	$tangal = $i['tanggal'];
 	?>
 	<!--Modal Edit Pengguna-->
 	<div class="modal fade" id="ModalEdit<?php echo $agenda_id; ?>" tabindex="-1" role="dialog"
@@ -409,7 +399,6 @@
 	$agenda_waktu = $i['agenda_waktu'];
 	$agenda_keterangan = $i['agenda_keterangan'];
 	$agenda_author = $i['agenda_author'];
-	$tangal = $i['tanggal'];
 	?>
 	<!--Modal Hapus Pengguna-->
 	<div class="modal fade" id="ModalHapus<?php echo $agenda_id; ?>" tabindex="-1" role="dialog"
